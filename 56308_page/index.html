@@ -9,23 +9,91 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
      <script src="./chat.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
      <link href="./chat.css" rel="stylesheet"> 
     </head>
      <body>
-
-
-     <!----- main ----->
+     <!-- 
      <h1>Connection Succeeded.</h1>
-     <h2>The web server has launched successfully via port 56308 !</h2>
-     <!----- /main ----->
+     <h2>The web server has launched successfully via port 56483 !</h2>
+
 
      <p>Send Message : </p>
      <p></p>
        <form method="post" onsubmit="writeMessage(); return false;">
           <input id="message" name="message" type="text" value="" />
           <input type="button" value="Send" onclick="writeMessage()">
-      </form>
-       <div id="messageTextBox"></div>
+      </form> -->
+       <br /><br /><br />
+       <div class="columns is-centered">
+        <div class="column is-8">
+        <h1 class="title is-1 has-text-centered ">Simple Chat</h1>
+        </div>
+       </div>
+
+       <div class="columns is-centered">
+        <div class="column is-6">
+        <!-- 吹き出し（右）の始まり -->
+        <div class="sb-box">
+            <div class="icon-img icon-img-right">
+                <img src="./icon.png" />
+            </div><!-- /.icon-img icon-img-right -->
+            <div class="icon-name icon-name-right">Rさん</div>
+            <div class="sb-side sb-side-right">
+                <div class="sb-txt sb-txt-right">
+                    <!-- <textarea rows="5" cols="30" style="border:0;background-color:#ffffff;color:#000000;" readonly></textarea>            -->
+                    <form method="post" onsubmit="writeMessage(); return false;">
+                        <div class="columns is-centered">
+                            <div class="column is-8 is-centered">
+                                <input id="message" name="message" type="text" class = "input" value="" />
+                            </div>
+                            <div class="column is-4 is-centered is-vertical-center">
+                                <input type="button"  class="button is-link is-outlined" value="Send" onclick="writeMessage()">
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.sb-txt sb-txt-right -->
+            </div><!-- /.sb-side sb-side-right -->
+        </div><!-- /.sb-box -->
+        <!-- 吹き出し（右）の終わり -->
+        </div>
+       </div>
+
+       <div class="columns is-centered">
+
+      <div id="messageTextBox" class = "column is-6">
+
+       <!-- 吹き出し（左）の始まり -->
+       <div class="sb-box">
+        <div class="icon-img icon-img-left">
+          <img src="./icon.png" />
+        </div><!-- /.icon-img icon-img-left -->
+        <div class="icon-name icon-name-left">Lさん</div>
+        <div class="sb-side sb-side-left">
+            <div class="sb-txt sb-txt-left">
+                Sample Text (Left)
+            </div><!-- /.sb-txt sb-txt-left -->
+        </div><!-- /.sb-side sb-side-left -->
+      </div><!-- /.sb-box -->
+      <!-- 吹き出し（左）の終わり -->
+
+      <!-- 吹き出し（右）の始まり -->
+      <div class="sb-box">
+        <div class="icon-img icon-img-right">
+            <img src="./icon.png" />
+        </div><!-- /.icon-img icon-img-right -->
+        <div class="icon-name icon-name-right">Rさん</div>
+        <div class="sb-side sb-side-right">
+            <div class="sb-txt sb-txt-right">
+                Sample Text (Right)
+            </div><!-- /.sb-txt sb-txt-right -->
+        </div><!-- /.sb-side sb-side-right -->
+      </div><!-- /.sb-box -->
+      <!-- 吹き出し（右）の終わり -->
+
+      </div>
+
+    </div>
 
      </body>
     </html>

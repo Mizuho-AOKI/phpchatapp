@@ -1,0 +1,140 @@
+/* ref: https://hebochans.com/speech-bubble/ */
+
+/* 全体 */
+  .is-vertical-center {
+    display: flex;
+    align-items: center;
+  }
+
+.sb-box {
+    position: relative;
+    overflow: hidden;
+  }
+  /* アイコン画像 */
+  .icon-img {
+    position: absolute;
+    overflow: hidden;
+    top: 0; /* 画像の位置を上から0に */
+    width: 80px; /* 画像の幅 */
+    height: 80px; /* 画像の高さ */
+  }
+  /* アイコン画像（左） */
+  .icon-img-left {
+    left: 0; /* 画像の位置を左から0に */
+  }
+  /* アイコン画像（右） */
+  .icon-img-right {
+    right: 0; /* 画像の位置を右から0に */
+  }
+  /* アイコン画像 */
+  .icon-img img {
+    border-radius: 50%; /* 画像を丸く表示する */
+    border: 2px solid #eee; /* 画像の縁取りの太さとカラー */
+  }
+  /* アイコンネーム */
+  .icon-name {
+    position: absolute;
+    width: 80px; /* ネームの最大幅を画像と同じに */
+    text-align: center; /* ネームの位置をセンターに */
+    top: 83px; /* ネームの位置を上から83に */
+    color: #777; /* ネームのカラー */
+    font-size: 10px; /* ネームのフォントサイズ */
+  }
+  /* アイコンネーム（左） */
+  .icon-name-left {
+    left: 0; /* ネームの位置を左から0に */
+  }
+  /* アイコンネーム（右） */
+  .icon-name-right {
+    right: 0; /* ネームの位置を右から0に */
+  }
+  /* 吹き出し */
+  .sb-side {
+    position: relative;
+    float: left;
+    margin: 0 105px 40px 105px; /* 吹き出しの上下左右の余白 */
+  }
+  .sb-side-right {
+    float: right;
+  }
+  /* 吹き出し内のテキスト */
+  .sb-txt {
+    position: relative;
+    border: 2px solid #eee; /* 吹き出しの縁取りの太さとカラー */
+    border-radius: 6px; /* 吹き出しを角丸に */
+    background: #fff; /* 吹き出しの背景色 */
+    color: #333; /* 吹き出し内のテキストのカラー */
+    font-size: 15px; /* 吹き出し内のフォントサイズ */
+    line-height: 1.7; /* 吹き出し内のテキストが2行以上になった時の行間 */
+    padding: 18px; /* 吹き出し内の上下左右の余白 */
+  }
+  .sb-txt > p:last-of-type {
+    padding-bottom: 0; /* 吹き出し内のテキストを改行した場合、最後のpタグにpadding-bottomをつけない */
+    margin-bottom: 0; /* 吹き出し内のテキストを改行した場合、最後のpタグにmargin-bottomをつけない */
+  }
+  /* 吹き出しの三角 */
+  .sb-txt:before {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    top: 16px; /* 吹き出し内の三角の位置 */
+    z-index: 3;
+  }
+  .sb-txt:after {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    top: 15px; /* beforeより-1px */
+    z-index: 2; /* beforeより-1 */
+  }
+  /* 吹き出しの三角（左） */
+  .sb-txt-left:before {
+    left: -7px;
+    border-width: 7px 10px 7px 0;
+    border-color: transparent #fff transparent transparent; /* 背景色と同じカラーに */
+  }
+  .sb-txt-left:after {
+    left: -10px; /* beforeより-3px */
+    border-width: 8px 10px 8px 0; /* beforeより上下+1px */
+    border-color: transparent #eee transparent transparent; /* 縁取りと同じカラーに */
+  }
+  /* 吹き出しの三角（右） */
+  .sb-txt-right:before {
+    right: -7px;
+    border-width: 7px 0 7px 10px;
+    border-color: transparent transparent transparent #fff; /* 背景色と同じカラーに */
+  }
+  .sb-txt-right:after {
+    right: -10px; /* beforeより-3px */
+    border-width: 8px 0 8px 10px; /* beforeより上下+1px */
+    border-color: transparent transparent transparent #eee; /* 縁取りと同じカラーに */
+  }
+  
+  /* 767px（iPad）以下 */
+  
+  @media (max-width: 767px) {
+    /* アイコン画像 */
+    .icon-img {
+      width: 60px; /* 画像の幅を-20px */
+      height: 60px; /* 画像の高さを-20px */
+    }
+    /* アイコンネーム */
+    .icon-name {
+      width: 60px; /* 画像の幅に合わせて-20px */
+      top: 62px; /* ネームの位置を上から62に */
+      font-size: 9px; /* ネームのフォントサイズを-1px */
+    }
+    /* 吹き出し（左） */
+    .sb-side-left {
+      margin: 0 0 30px 78px; /* 吹き出し（左）の上下左右の余白を狭く */
+    }
+    /* 吹き出し（右） */
+    .sb-side-right {
+      margin: 0 78px 30px 0; /* 吹き出し（右）の上下左右の余白を狭く */
+    }
+    /* 吹き出し内のテキスト */
+    .sb-txt {
+      padding: 12px; /* 吹き出し内の上下左右の余白を-6px */
+    }
+  }
+  
