@@ -1,0 +1,31 @@
+    <!DOCTYPE html>
+    <html lang="ja">
+     <head>
+    <?php
+    header('Access-Control-Allow-Origin: *');
+    ?>  
+     <meta charset="utf-8">
+     <title>Apache Test Page</title>
+     <meta name="description" content="input description here">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+     <script src="./chat.js"></script>
+     <link href="./chat.css" rel="stylesheet"> 
+    </head>
+     <body>
+
+     <!----- main ----->
+     <h1>Connection Succeeded.</h1>
+     <h2>The web server has launched successfully via port 56483 !</h2>
+     <!----- /main ----->
+
+     <p>Send Message : </p>
+     <p></p>
+       <form method="post" onsubmit="writeMessage(); return false;">
+          <input id="message" name="message" type="text" value="" />
+          <input type="button" value="Send" onclick="writeMessage()">
+      </form>
+       <div id="messageTextBox"></div>
+
+     </body>
+    </html>
