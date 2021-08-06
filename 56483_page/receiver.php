@@ -18,10 +18,17 @@
     // }
  
     $message = '';
+    $sender  = '';
     if (isset($_POST['message']) && is_string($_POST['message'])) {
         $message = htmlspecialchars($_POST['message'], ENT_QUOTES);
+        $sender_ip = $_SERVER['REMOTE_ADDR'];  
     }
-    if ($message == '') {
+    if (isset($_POST['sender']) && is_string($_POST['sender'])) {
+        $sender = htmlspecialchars($_POST['sender'], ENT_QUOTES);
+    }
+
+    // message was invalid.
+    if ($message == '' || $sender == '') {
         exit;
     }
 
@@ -39,6 +46,6 @@
     flock($fp, LOCK_UN);
     fclose($fp);
 
-    $strMsg = date("Y-m-d H:i:s") . ' - ' . $message . "\n" . $strMsg;
+    $strMsg = $sender . ',' . date("Y-m-d H:i:s") . ',' . $message . "\n" . $strMsg;
     file_put_contents('message.log', $strMsg, LOCK_EX);
 ?>

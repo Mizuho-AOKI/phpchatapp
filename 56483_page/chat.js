@@ -6,7 +6,7 @@ function readMessage() {
         type: 'post',
         url: './message.log'
         })
-    // set the permission of reading and writing ./message.log
+    // Please set the permission of reading and writing ./message.log by yourself.
     .then(
         // function (data) {
         //     log = data.replace(/[\n\r]/g, "<br />");
@@ -25,7 +25,13 @@ function readMessage() {
                 }
                 
                 outArray.push( lines[i] );
-                $('#messageTextBox').append(Lmsg(lines[i]));
+                
+                var msg_ary = lines[i].split(',');
+                if(msg_ary[0] == 'Me'){
+                $('#messageTextBox').append(Rmsg(msg_ary[0], msg_ary[2]));
+                }else{
+                $('#messageTextBox').append(Lmsg(msg_ary[0], msg_ary[2]));
+                }
             }
             return outArray;
         },
@@ -37,12 +43,35 @@ function readMessage() {
 
 
 function writeMessage() {
+
+    // send message to the target IP address.
+    $.ajax({
+        type: 'post',
+        url: './receiver.php',
+        data: {
+            'message' : $("#message").val(),
+            'sender'  : "Me"
+        }
+    })
+    .then(
+        function (data) {
+            // 自分のセリフ出力処理入れる
+            readMessage();
+            $("#message").val('');
+            $('#messageTextBox').append(msghtml);
+        },
+        function () {
+            alert("Error sending the message : " + $("#message").val() +"");
+        }
+    );
+
     // send message to the target IP address.
     $.ajax({
         type: 'post',
         url: 'http://192.168.13.123:56308/receiver.php',
         data: {
-            'message' : $("#message").val()
+            'message' : $("#message").val(),
+            'sender'  : "http://192.168.13.123:56483"
         }
     })
     .then(
@@ -65,14 +94,14 @@ $(document).ready(function() {
 });
 
 
-function Lmsg(msg){
+function Lmsg(sender, msg){
     msghtml = `
     <!-- 吹き出し（左）の始まり -->
     <div class="sb-box">
       <div class="icon-img icon-img-left">
         <img src="./icon.png" />
       </div><!-- /.icon-img icon-img-left -->
-      <div class="icon-name icon-name-left">Lさん</div>
+      <div class="icon-name icon-name-left">` + sender + `</div>
       <div class="sb-side sb-side-left">
           <div class="sb-txt sb-txt-left"> `
     + msg +  
@@ -85,21 +114,23 @@ function Lmsg(msg){
     return msghtml;
 }
 
-function Rmsg(msg){
+function Rmsg(sender, msg){
+
     msghtml = `
     <!-- 吹き出し（右）の始まり -->
     <div class="sb-box">
-      <div class="icon-img icon-img-right">
-        <img src="./icon.png" />
-      </div><!-- /.icon-img icon-img-right -->
-      <div class="icon-name icon-name-right">Rさん</div>
-      <div class="sb-side sb-side-right">
-          <div class="sb-txt sb-txt-right"> `
-    + msg +
-    `      </div><!-- /.sb-txt sb-txt-right -->
-      </div><!-- /.sb-side sb-side-right -->
+        <div class="icon-img icon-img-right">
+            <img src="./icon.png" />
+        </div><!-- /.icon-img icon-img-right -->
+        <div class="icon-name icon-name-right">`+ sender +`</div>
+        <div class="sb-side sb-side-right">
+            <div class="sb-txt sb-txt-right">
+                `+ msg +`
+            </div><!-- /.sb-txt sb-txt-right -->
+        </div><!-- /.sb-side sb-side-right -->
     </div><!-- /.sb-box -->
     <!-- 吹き出し（右）の終わり -->
-    `;
+    
+    `
     return msghtml;
 }

@@ -34,7 +34,7 @@
   /* アイコンネーム */
   .icon-name {
     position: absolute;
-    width: 80px; /* ネームの最大幅を画像と同じに */
+    /* width: 80px; ネームの最大幅を画像と同じに */
     text-align: center; /* ネームの位置をセンターに */
     top: 83px; /* ネームの位置を上から83に */
     color: #777; /* ネームのカラー */
