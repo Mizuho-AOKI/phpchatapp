@@ -36,14 +36,6 @@
         });
     });
 
-    $(function(){
-        $("#send_btn").click(function(){
-            $("#Sound").prop('volume', 0.1);
-            $("#Sound").get(0).play();
-            console.log($("#Sound").prop('volume'));
-        });
-    });
-
   </script>
 
 </head>
@@ -143,7 +135,7 @@
         </div><!-- /.icon-img icon-img-left -->
         <div class="icon-name icon-name-left">Left</div>
         <div class="sb-side sb-side-left">
-            <div class="sb-txt sb-txt-left">
+            <div name="msg_l_default" class="sb-txt sb-txt-left">
                 Sample Text (Left)
             </div><!-- /.sb-txt sb-txt-left -->
         </div><!-- /.sb-side sb-side-left -->
@@ -157,14 +149,14 @@
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">Right</div>
         <div class="sb-side sb-side-right">
-            <div class="sb-txt sb-txt-right">
+            <div name="msg_r_default" class="sb-txt sb-txt-right">
                 Sample Text (Right)
             </div><!-- /.sb-txt sb-txt-right -->
         </div><!-- /.sb-side sb-side-right -->
     </div><!-- /.sb-box -->
     <!-- / Chat box (right) -->
 
-    </div>  
+    </div> 
 
 </div>
 
@@ -172,12 +164,20 @@
 <!-- <embed src="sound.mp3" autostart="false" width="0" height="0" id="sound"
 enablejavascript="true"> -->
 <!-- <audio src="sound.mp3" id="send_sound"></audio> -->
-<audio id="Sound" preload="auto">
-    <source src="sound.mp3" type="audio/mp3">
+<audio id="SendSound" preload="auto">
+    <source src="send.mp3" type="audio/mp3">
+</audio>
+
+<audio id="RecvSound" preload="auto">
+    <source src="receive.mp3" type="audio/mp3">
+</audio>
+
+<audio id="DeleteSound" preload="auto">
+    <source src="delete.mp3" type="audio/mp3">
 </audio>
 
 <!-- (要修正) ミュート機能 -->
-<!-- (要修正) 受け取ったときの音追加 -->
+<!-- (要修正) 受け取ったとき, 削除したときの音追加 -->
 <!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
 
 </body>
