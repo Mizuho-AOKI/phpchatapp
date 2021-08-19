@@ -1,5 +1,27 @@
 // ref: https://www.taru-net.jp/tec/javascript-chat/
 
+
+function deleteMessage() {
+    msg = "Delete all messages?";
+    if(window.confirm(msg)){
+        readMessage();
+        // call deletelog.php via get request.
+        $.ajax({
+            type: 'get',
+            url: './deletelog.php',
+        })
+        .then(
+            function () {
+                return;
+            },
+            function () {
+                alert("Error deleting the message log");
+            }
+        );
+    }
+}
+
+
 function readMessage() {
     // load ./message.log
     $.ajax({
@@ -52,47 +74,96 @@ function readMessage() {
 
 function writeMessage() {
 
-    // send message to the target IP address.
-    $.ajax({
-        type: 'post',
-        url: './receiver.php',
-        data: {
-            'message' : $("#message").val(),
-            'sender'  : "Me"
-        }
-    })
-    .then(
-        function (data) {
-            // 自分のセリフ出力処理入れる
-            readMessage();
-            $("#message").val('');
-            $('#messageTextBox').append(msghtml);
-        },
-        function () {
-            alert("Error sending the message : " + $("#message").val() +"");
-        }
-    );
+    // get target ip address
+    var targetip = $("#targetip").val();
+
+    // get my ip address
+    var myip = $("#myip").text();
 
     // send message to the target IP address.
     $.ajax({
         type: 'post',
-        url: 'http://192.168.13.123:56308/receiver.php',
+        url: `http://${targetip}/receiver.php`,
         data: {
             'message' : $("#message").val(),
-            'sender'  : "http://192.168.13.123:56483"
+            'sender'  : `http://${myip}`
         }
     })
     .then(
-        function (data) {
-            // 自分のセリフ出力処理入れる
-            readMessage();
-            $("#message").val('');
-            $('#messageTextBox').append(msghtml);
+        function(result){
+            if(result=="succeed"){
+                $.ajax({
+                    type: 'post',
+                    url: './receiver.php',
+                    data: {
+                        'message' : $("#message").val(),
+                        'sender'  : "Me"
+                    }
+                })
+                .then(
+                    function (saveflag) {
+                        if(saveflag=="succeed"){
+                            readMessage();
+                            $("#message").val('');
+                            $('#messageTextBox').append(msghtml);
+                        }
+                    },
+                    function () {
+                        alert("Error saving the message : " + $("#message").val() +"");
+                    }
+                );
+            }
         },
-        function () {
-            alert("Error sending the message : " + $("#message").val() +"");
+        function(){
+            window.alert("Error sending the message.");
         }
     );
+
+    // // send message to the target IP address.
+    // $.ajax({
+    //     type: 'post',
+    //     url: './receiver.php',
+    //     data: {
+    //         'message' : $("#message").val(),
+    //         'sender'  : "Me"
+    //     }
+    // })
+    // .then(
+    //     function (data) {
+    //         // 自分のセリフ出力処理入れる
+    //         readMessage();
+    //         $("#message").val('');
+    //         $('#messageTextBox').append(msghtml);
+    //     },
+    //     function () {
+    //         alert("Error saving the message : " + $("#message").val() +"");
+    //         errorflag = true;
+    //     }
+    // );
+
+    // if(!errorflag){
+    //     window.alert(errorflag);
+    //     $.ajax({
+    //         type: 'post',
+    //         url: `http://${targetip}/receiver.php`,
+    //         data: {
+    //             'message' : $("#message").val(),
+    //             'sender'  : `http://${myip}`
+    //         }
+    //     })
+    //     .then(
+    //         function (data) {
+    //             // 自分のセリフ出力処理入れる
+    //             readMessage();
+    //             $("#message").val('');
+    //             $('#messageTextBox').append(msghtml);
+    //         },
+    //         function () {
+    //             alert("Error sending the message : " + $("#message").val() +"");
+    //         }
+    //     );
+    // }
+
 }
 
 // check received message every 1 seconds
