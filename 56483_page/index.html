@@ -34,12 +34,49 @@
             $(".navbar-burger").toggleClass("is-active");
             $(".navbar-menu").toggleClass("is-active");
         });
+
+        // Check for click events on a modal window
+        $("#open").on("click", function() {
+        $("div.modal").addClass("is-active");
+        })
+
+        $("#cancel, #close, div.modal-background").on("click", function() {
+        $("div.modal").removeClass("is-active");
+        })
     });
+
+
+
 
   </script>
 
 </head>
  <body>
+
+    <!-- Modal window -->
+    <!-- <div>
+    <div>
+        <button class="button is-large" id="open">表示</button>
+    </div> -->
+    
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">message.log</p>
+            <button class="delete" id="cancel"></button>
+          </header>
+          <section class="modal-card-body">
+            <!-- Content ... -->
+            <iframe src="./message.log" width="100%"></iframe>
+          </section>
+          <footer class="modal-card-foot">
+              <!-- (要修正) msglogを更新する機能つける -->
+            <button class="button is-success">Update</button>
+            <button class="button" id="close">Close</button>
+          </footer>
+        </div>
+    </div>
 
     <!-- Navigation bar -->
     <!-- Ref : https://bulma.io/documentation/components/navbar/ -->
@@ -63,9 +100,12 @@
               Home
             </a>
 
-            <a class="navbar-item">
+            <!-- <a class="navbar-item">
               Documentation
-              <!-- (修正) pdfにりんく飛ばす -->
+            </a> -->
+
+            <a class="navbar-item" id="open">
+                Msg Log
             </a>
 
           </div>
@@ -175,6 +215,7 @@
 </audio>
 
 <!-- (要修正) ミュート機能 -->
+<!-- (要修正) メディアはフォルダを分ける. -->
 <!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
 
 </body>
