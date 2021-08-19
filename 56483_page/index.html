@@ -1,97 +1,187 @@
+<!-- Simple chat agent -->
+<!-- # Set your page ip on the "./config.json" file. -->
+
+<!DOCTYPE html>
+<html lang="ja">
+ <head>
+ <meta charset="utf-8">
+ <title>Apache Test Page</title>
+ <meta name="description" content="input description here">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+ <script src="./chat.js"></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+ <link href="./chat.css" rel="stylesheet"> 
+
+<!-- (要修正) onload.jsにまとめて外部ファイルにする. -->
+
+ <script language="javascript" type="text/javascript">
+    // on_load process : check page ip from config.json
+    $(function(){
+      url = 'config.json';
+      $.getJSON(url, (data) => {
+        $("#myip").text(data.ip);
+        console.log(`ip=${data.ip}`);
+      });
+    });
+    // configで自分の名前, icon種類など簡単な設定を変えられるように.
+
+    $(document).ready(function() {
+    // Check for click events on the navbar burger icon
+    $(".navbar-burger").click(function() {
+
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
+    });
+    });
+
+    // 　$('input').click(function() {
+    //     $("#send_sound").get(0).play();
+    //     $("#send_sound").text("sent")
+    //   });
+
+    $(function(){
+        $("#send_btn").click(function(){
+            // document.getElementById("Sound").currentTime = 0; //再生秒数を 0 にセット
+            // document.getElementById("Sound").play();
+            // $("#Sound").currentTime=0;
+            $("#Sound").prop('volume', 0.1);
+            // $('#Sound').get(0).prop("volume", 0.1);
+            $("#Sound").get(0).play();
+            console.log($("#Sound").prop('volume'));
+        });
+    });
 
 
-    <!DOCTYPE html>
-    <html lang="ja">
-     <head>
-     <meta charset="utf-8">
-     <title>Apache Test Page</title>
-     <meta name="description" content="input description here">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-     <script src="./chat.js"></script>
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-     <link href="./chat.css" rel="stylesheet"> 
-    </head>
-     <body>
-     <!-- 
-     <h1>Connection Succeeded.</h1>
-     <h2>The web server has launched successfully via port 56483 !</h2>
+  </script>
 
+</head>
+ <body>
 
-     <p>Send Message : </p>
-     <p></p>
-       <form method="post" onsubmit="writeMessage(); return false;">
-          <input id="message" name="message" type="text" value="" />
-          <input type="button" value="Send" onclick="writeMessage()">
-      </form> -->
-       <div class="columns is-centered mb-5 mt-5">
-        <div class="column is-8">
-        <h1 class="title is-1 has-text-centered ">Simple Chat</h1>
+    <!-- Navigation bar -->
+    <!-- Ref : https://bulma.io/documentation/components/navbar/ -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a href="../index.html">
+              <img src="./pageicon.svg" width="112" height="28">
+              <!-- (要修正) change icon! yokonaganisuru-->
+          </a>
+
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
         </div>
-       </div>
+      
+        <div id="navbarBasicExample" class="navbar-menu">
+          <div class="navbar-start">
+            <a class="navbar-item" href="../index.html">
+              Home
+            </a>
 
-       <div class="columns is-centered">
-        <div class="column is-6">
-        <!-- 吹き出し（右）の始まり -->
-        <div class="sb-box">
-            <div class="icon-img icon-img-right">
-                <img src="./icon.png" />
-            </div><!-- /.icon-img icon-img-right -->
-            <div class="icon-name icon-name-right">http://192.168.13.123:56483</div>
-            <div class="sb-side sb-side-right">
-                <div class="sb-txt sb-txt-right">
-                    <!-- <textarea rows="5" cols="30" style="border:0;background-color:#ffffff;color:#000000;" readonly></textarea>            -->
-                    <form method="post" onsubmit="writeMessage(); return false;">
-                        <div class="columns is-centered">
-                            <div class="column is-8 is-centered">
-                                <input id="message" name="message" type="text" class = "input" value="" />
-                            </div>
-                            <div class="column is-4 is-centered is-vertical-center">
-                                <input type="button"  class="button is-link is-outlined is-small is-fullwidth" value="Send" onclick="writeMessage()">
-                            </div>
-                        </div>
-                    </form>
-                </div><!-- /.sb-txt sb-txt-right -->
-            </div><!-- /.sb-side sb-side-right -->
-        </div><!-- /.sb-box -->
-        <!-- 吹き出し（右）の終わり -->
+            <a class="navbar-item">
+              Documentation
+            </a>
+
+          </div>
+      
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-danger">
+                  <strong>Delete All Msg</strong>
+                  <!-- (要修正) メッセージ消去機能追加 -->
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-       </div>
+      </nav>
 
-    <div class="columns is-centered">
-
-      <div id="messageTextBox" class = "column is-6">
-
-        <!-- 吹き出し（左）の始まり -->
-        <div class="sb-box">
-            <div class="icon-img icon-img-left">
-            <img src="./icon.png" />
-            </div><!-- /.icon-img icon-img-left -->
-            <div class="icon-name icon-name-left">Lさん</div>
-            <div class="sb-side sb-side-left">
-                <div class="sb-txt sb-txt-left">
-                    Sample Text (Left)
-                </div><!-- /.sb-txt sb-txt-left -->
-            </div><!-- /.sb-side sb-side-left -->
-        </div><!-- /.sb-box -->
-        <!-- 吹き出し（左）の終わり -->
-
-        <!-- 吹き出し（右）の始まり -->
-        <div class="sb-box">
-            <div class="icon-img icon-img-right">
-                <img src="./icon.png" />
-            </div><!-- /.icon-img icon-img-right -->
-            <div class="icon-name icon-name-right">Rさん</div>
-            <div class="sb-side sb-side-right">
-                <div class="sb-txt sb-txt-right">
-                    Sample Text (Right)
-                </div><!-- /.sb-txt sb-txt-right -->
-            </div><!-- /.sb-side sb-side-right -->
-        </div><!-- /.sb-box -->
-        <!-- 吹き出し（右）の終わり -->
-
-        </div>  
-
+    <!-- Title -->
+   <div class="columns is-centered mb-5 mt-5">
+    <div class="column is-8">
+    <h1 class="title is-1 has-text-centered ">Simple Chat</h1>
     </div>
-     </body>
-    </html>
+   </div>
+
+   <div class="columns is-centered">
+    <div class="column is-6">
+    <!-- Box to send message -->
+    <div class="sb-box">
+        <div class="icon-img icon-img-right">
+            <img src="./icon.png" />
+        </div><!-- /.icon-img icon-img-right -->
+        <div id="myip" class="icon-name icon-name-right">You</div>
+        <div class="sb-side sb-side-right">
+            <div class="sb-txt sb-txt-right">
+                <!-- <textarea rows="5" cols="30" style="border:0;background-color:#ffffff;color:#000000;" readonly></textarea>            -->
+                <form method="post" onsubmit="writeMessage(); return false;">
+                    <div class="columns is-centered">
+                        <div class="column is-8 is-centered">
+                            <input id="message" name="message" type="text" class = "input" value="" />
+                        </div>
+                        <div class="column is-4 is-centered is-vertical-center">
+                            <input type="button" id="send_btn" class="button is-link is-outlined is-small is-fullwidth" value="Send" onclick="writeMessage()">
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.sb-txt sb-txt-right -->
+        </div><!-- /.sb-side sb-side-right -->
+    </div><!-- /.sb-box -->
+    <!-- / Box to send message -->
+    </div>
+   </div>
+
+<div class="columns is-centered">
+
+  <div id="messageTextBox" class = "column is-6">
+
+    <!-- Chat box (left) -->
+    <div class="sb-box">
+        <div class="icon-img icon-img-left">
+        <img src="./icon.png" />
+        </div><!-- /.icon-img icon-img-left -->
+        <div class="icon-name icon-name-left">Lさん</div>
+        <div class="sb-side sb-side-left">
+            <div class="sb-txt sb-txt-left">
+                Sample Text (Left)
+            </div><!-- /.sb-txt sb-txt-left -->
+        </div><!-- /.sb-side sb-side-left -->
+    </div><!-- /.sb-box -->
+    <!-- / Chat box (left) -->
+
+    <!-- Chat box (right) -->
+    <div class="sb-box">
+        <div class="icon-img icon-img-right">
+            <img src="./icon.png" />
+        </div><!-- /.icon-img icon-img-right -->
+        <div class="icon-name icon-name-right">Rさん</div>
+        <div class="sb-side sb-side-right">
+            <div class="sb-txt sb-txt-right">
+                Sample Text (Right)
+            </div><!-- /.sb-txt sb-txt-right -->
+        </div><!-- /.sb-side sb-side-right -->
+    </div><!-- /.sb-box -->
+    <!-- / Chat box (right) -->
+
+    </div>  
+
+</div>
+
+<!-- sound -->
+<!-- <embed src="sound.mp3" autostart="false" width="0" height="0" id="sound"
+enablejavascript="true"> -->
+<!-- <audio src="sound.mp3" id="send_sound"></audio> -->
+<audio id="Sound" preload="auto">
+    <source src="sound.mp3" type="audio/mp3">
+</audio>
+
+<!-- (要修正) ミュート機能 -->
+<!-- (要修正) 受け取ったときの音追加 -->
+<!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
+
+</body>
+</html>

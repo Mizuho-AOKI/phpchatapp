@@ -1,4 +1,5 @@
-
+<!-- Simple chat agent -->
+<!-- # Set your page ip on the "./config.json" file. -->
 
     <!DOCTYPE html>
     <html lang="ja">
@@ -11,19 +12,21 @@
      <script src="./chat.js"></script>
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
      <link href="./chat.css" rel="stylesheet"> 
+
+     <script language="javascript" type="text/javascript">
+        // on_load process : check page ip from config.json
+        $(function(){
+          url = 'config.json';
+          $.getJSON(url, (data) => {
+            $("#myip").text(data.ip);
+            console.log(`ip=${data.ip}`);
+          });
+        });
+      </script>
+
     </head>
      <body>
-     <!-- 
-     <h1>Connection Succeeded.</h1>
-     <h2>The web server has launched successfully via port 56483 !</h2>
 
-
-     <p>Send Message : </p>
-     <p></p>
-       <form method="post" onsubmit="writeMessage(); return false;">
-          <input id="message" name="message" type="text" value="" />
-          <input type="button" value="Send" onclick="writeMessage()">
-      </form> -->
        <div class="columns is-centered mb-5 mt-5">
         <div class="column is-8">
         <h1 class="title is-1 has-text-centered ">Simple Chat</h1>
@@ -32,12 +35,12 @@
 
        <div class="columns is-centered">
         <div class="column is-6">
-        <!-- 吹き出し（右）の始まり -->
+        <!-- Box to send message -->
         <div class="sb-box">
             <div class="icon-img icon-img-right">
                 <img src="./icon.png" />
             </div><!-- /.icon-img icon-img-right -->
-            <div class="icon-name icon-name-right">http://192.168.13.123:56308</div>
+            <div id="myip" class="icon-name icon-name-right">You</div>
             <div class="sb-side sb-side-right">
                 <div class="sb-txt sb-txt-right">
                     <!-- <textarea rows="5" cols="30" style="border:0;background-color:#ffffff;color:#000000;" readonly></textarea>            -->
@@ -54,7 +57,7 @@
                 </div><!-- /.sb-txt sb-txt-right -->
             </div><!-- /.sb-side sb-side-right -->
         </div><!-- /.sb-box -->
-        <!-- 吹き出し（右）の終わり -->
+        <!-- / Box to send message -->
         </div>
        </div>
 
@@ -62,7 +65,7 @@
 
       <div id="messageTextBox" class = "column is-6">
 
-        <!-- 吹き出し（左）の始まり -->
+        <!-- Chat box (left) -->
         <div class="sb-box">
             <div class="icon-img icon-img-left">
             <img src="./icon.png" />
@@ -74,9 +77,9 @@
                 </div><!-- /.sb-txt sb-txt-left -->
             </div><!-- /.sb-side sb-side-left -->
         </div><!-- /.sb-box -->
-        <!-- 吹き出し（左）の終わり -->
+        <!-- / Chat box (left) -->
 
-        <!-- 吹き出し（右）の始まり -->
+        <!-- Chat box (right) -->
         <div class="sb-box">
             <div class="icon-img icon-img-right">
                 <img src="./icon.png" />
@@ -88,10 +91,15 @@
                 </div><!-- /.sb-txt sb-txt-right -->
             </div><!-- /.sb-side sb-side-right -->
         </div><!-- /.sb-box -->
-        <!-- 吹き出し（右）の終わり -->
+        <!-- / Chat box (right) -->
 
         </div>  
 
     </div>
+
+    <!-- sound -->
+    <embed src="sound.mp3" autostart="false" width="0" height="0" id="sound"
+    enablejavascript="true">
+
      </body>
     </html>

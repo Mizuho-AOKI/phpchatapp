@@ -1,3 +1,4 @@
+    <!-- Simple index.html to show site map -->
     <!DOCTYPE html>
     <html lang="ja">
      <head>
@@ -5,13 +6,47 @@
      <title>Apache Test Page</title>
      <meta name="description" content="input description here ">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
      </head>
      <body>
+    
+    <!-- title -->
+     <div class="columns is-centered mb-5 mt-5">
+        <div class="column is-9 has-text-centered">
+            <h1 class="title is-2">Index.html</h1>
+        </div>
+    </div>
 
-     <!----- main ----->
-     <h1>Congratulations!</h1>
-     <h2>The web server has launched successfully!</h2>
-     <!----- /main ----->
+    <!-- site map -->
+    <div class="columns is-centered mb-5 mt-5">
+        <div class="column is-4">
+        <aside class="menu">
+            <ul class="menu-list">
+
+            <li>
+                <a class="is-active">Chat agents</a>
+                <ul>
+                <li><a href="./56483_page/index.html" target="_blank" rel="noopener noreferrer"> /563483_page/index.html </a></li>
+                <li><a href="./56308_page/index.html" target="_blank" rel="noopener noreferrer"> /56308_page/index.html  </a></li>
+                </ul>
+            </li>
+            </ul>
+
+            <ul class="menu-list mt-5">
+                <li>
+                <a class="is-active">For debug</a>
+                <ul>
+                    <li><a href="./test.php"              target="_blank" rel="noopener noreferrer"> ./test.php              </a></li>
+                    <li><a href="./default_page.html"     target="_blank" rel="noopener noreferrer"> ./default_page.html     </a></li>
+                </ul>
+                </li>
+            </ul>
+
+        </aside>
+        </div>
+      </div>
 
      </body>
     </html>
+
+

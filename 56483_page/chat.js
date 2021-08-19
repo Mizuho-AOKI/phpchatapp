@@ -33,6 +33,14 @@ function readMessage() {
                 $('#messageTextBox').append(Lmsg(msg_ary[0], msg_ary[2]));
                 }
             }
+
+            //// サウンドを実装予定
+            // if(soundFlag){
+            //     $("#sound").Play();
+            //     var music = new Audio('sound.mp3');
+            //     music.play();  // 再生
+            // }
+
             return outArray;
         },
         function () {

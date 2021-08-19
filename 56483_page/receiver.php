@@ -20,7 +20,8 @@
     $message = '';
     $sender  = '';
     if (isset($_POST['message']) && is_string($_POST['message'])) {
-        $message = htmlspecialchars($_POST['message'], ENT_QUOTES);
+        $message = $_POST['message']; // non-sanitize
+        // $message = htmlspecialchars($_POST['message'], ENT_QUOTES); //sanitized
         $sender_ip = $_SERVER['REMOTE_ADDR'];  
     }
     if (isset($_POST['sender']) && is_string($_POST['sender'])) {
