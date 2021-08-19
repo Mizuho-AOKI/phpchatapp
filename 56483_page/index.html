@@ -14,7 +14,6 @@
  <link href="./chat.css" rel="stylesheet"> 
 
 <!-- (要修正) onload.jsにまとめて外部ファイルにする. -->
-
  <script language="javascript" type="text/javascript">
 
     // on_load process : check page ip from config.json
@@ -25,7 +24,8 @@
         console.log(`ip=${data.ip}`);
       });
     });
-    // configで自分の名前, icon種類など簡単な設定を変えられるように.
+    // (要修正) configで自分の名前, icon種類など簡単な設定を変えられるように.
+    // (要修正) message log を閲覧する機能つける. 浮き上がらせる感じで.
 
     $(document).ready(function() {
         // Check for click events on the navbar burger icon
@@ -65,6 +65,7 @@
 
             <a class="navbar-item">
               Documentation
+              <!-- (修正) pdfにりんく飛ばす -->
             </a>
 
           </div>
@@ -161,9 +162,6 @@
 </div>
 
 <!-- sound -->
-<!-- <embed src="sound.mp3" autostart="false" width="0" height="0" id="sound"
-enablejavascript="true"> -->
-<!-- <audio src="sound.mp3" id="send_sound"></audio> -->
 <audio id="SendSound" preload="auto">
     <source src="send.mp3" type="audio/mp3">
 </audio>
@@ -177,7 +175,6 @@ enablejavascript="true"> -->
 </audio>
 
 <!-- (要修正) ミュート機能 -->
-<!-- (要修正) 受け取ったとき, 削除したときの音追加 -->
 <!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
 
 </body>

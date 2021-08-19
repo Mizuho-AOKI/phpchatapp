@@ -1,6 +1,5 @@
 // ref: https://www.taru-net.jp/tec/javascript-chat/
 
-
 function deleteMessage() {
     msg = "Delete all messages?";
     if(window.confirm(msg)){
@@ -14,6 +13,7 @@ function deleteMessage() {
             function (deleteflag) {
                 if(deleteflag=="succeed"){
                     // play sound.mp3
+                    $("#DeleteSound").prop('currentTime', 0);
                     $("#DeleteSound").prop('volume', 1);
                     $("#DeleteSound").get(0).play();
                 }
@@ -24,7 +24,6 @@ function deleteMessage() {
         );
     }
 }
-
 
 function readMessage() {
     // load ./message.log
@@ -38,26 +37,22 @@ function readMessage() {
             var text  = data.replace(/\r\n|\r/g, "\n");
             var lines = text.split( '\n' );
             var outArray = new Array();
-
-
-            console.log(`i=${i}, msg_ary[2] = ${lines[0].split(',')[2]} ,lines.length=${lines.length}`);
-            console.log($("div[name='msg_l']").eq(0).text())
-
             var latestmsg = lines[0].split(',')
 
-            if(latestmsg[0] !== 'Me' && ($("div[name='msg_l']").eq(0).text().indexOf(lines[0].split(',')[2]) == -1) && $("div[name='msg_l']").eq(0).text()){
-                // play sound.mp3
-                console.log("kokokoko!!!");
+            if(latestmsg[0] !== 'Me' && $("div[name='msg_l']").eq(0).text() && latestmsg[2] 
+               && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[2]) == -1) ){
+                // play receive.mp3
+                $("#RecvSound").prop('currentTime', 0);
                 $("#RecvSound").prop('volume', 1);
                 $("#RecvSound").get(0).play();
             }
             
             $('#messageTextBox').html(""); // delete msgs
+
             for ( var i = 0; i < lines.length; i++ ) {
 
                 // ignore blank line
                 if ( lines[i] == '' ) {
-                    console.log(`now i=${i}, continue`)
                     continue;
                 }
                 
@@ -65,61 +60,20 @@ function readMessage() {
                 
                 var msg_ary = lines[i].split(',');
 
-                // lines[-1]が現状ページトップのメッセージと違う & lines[-1]がMeからではない
-                // ならば, 受信音を鳴らす.
-
-                // if(i == 0 && ($("div[name='msg_l']").eq(0).text().indexOf(msg_ary[2]) == -1)){
-                //     // play sound.mp3
-                //     $("#RecvSound").prop('volume', 1);
-                //     $("#RecvSound").get(0).play();
-                // }
-
                 if(msg_ary[0] == 'Me'){
                     $('#messageTextBox').append(Rmsg(msg_ary[0], msg_ary[2]));
                 }else{
-                    // check if the latest msg has updated or not.
-                    // if( i == lines.length-1 && msg_ary[2] !== ""){
-                    //     // play sound.mp3
-                    //     $("#Sound").prop('volume', 0.1);
-                    //     $("#Sound").get(0).play();
-                    // }
-
-                    console.log(`i=${i}, msg_ary[2] = ${msg_ary[2]} ,lines.length=${lines.length}`);
-                    console.log($("div[name='msg_l']").eq(0).text())
-                    // console.log(lines.length)
-                    // if( i == lines.length-2 ){
-                    //     // play sound.mp3
-                    //     console.log(msg_ary[2]);
-                    //     console.log($("div[name='msg_l']").eq(0).text());
-                    // }
-
-                    // if( i == lines.length-1 && msg_ary[2] != $("div[name='msg_l']").eq(0).text() ){
-                    //     // play sound.mp3
-                    //     window.alert("hello!");
-                    //     $("#RecvSound").prop('volume', 1);
-                    //     $("#RecvSound").get(0).play();
-                    // }
                     $('#messageTextBox').append(Lmsg(msg_ary[0], msg_ary[2]));
                 }
             }
 
-
-
-            // if(renewed){
-                // play sound.mp3
-                // $("#Sound").prop('volume', 0.1);
-                // $("#Sound").get(0).play();
-            // }
-
-
             return outArray;
         },
         function () {
-            // alert("Error loading the message log.");
+            console.log("Error loading the message log.");
         }
     );
 }
-
 
 function writeMessage() {
 
@@ -156,6 +110,7 @@ function writeMessage() {
                             $("#message").val('');
                             $('#messageTextBox').append(msghtml);
                             // play sound.mp3
+                            $("#SendSound").prop('currentTime', 0);
                             $("#SendSound").prop('volume', 1);
                             $("#SendSound").get(0).play();
                         }
