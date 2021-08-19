@@ -35,18 +35,19 @@
             $(".navbar-menu").toggleClass("is-active");
         });
 
-        // Check for click events on a modal window
+        // Modal controller
         $("#open").on("click", function() {
-        $("div.modal").addClass("is-active");
+            $('#iframe_id')[0].contentDocument.location.reload(true);
+            $("div.modal").addClass("is-active");
         })
-
         $("#cancel, #close, div.modal-background").on("click", function() {
-        $("div.modal").removeClass("is-active");
+            $("div.modal").removeClass("is-active");
         })
+        $("#update").on("click", function() {
+            $('#iframe_id')[0].contentDocument.location.reload(true);
+        })
+
     });
-
-
-
 
   </script>
 
@@ -54,11 +55,6 @@
  <body>
 
     <!-- Modal window -->
-    <!-- <div>
-    <div>
-        <button class="button is-large" id="open">表示</button>
-    </div> -->
-    
     <div class="modal">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -67,12 +63,11 @@
             <button class="delete" id="cancel"></button>
           </header>
           <section class="modal-card-body">
-            <!-- Content ... -->
-            <iframe src="./message.log" width="100%"></iframe>
+            <!-- Modal content ... -->
+            <iframe src="./message.log" id="iframe_id" width="100%"></iframe>
           </section>
           <footer class="modal-card-foot">
-              <!-- (要修正) msglogを更新する機能つける -->
-            <button class="button is-success">Update</button>
+            <button class="button is-success" id="update">Update</button>
             <button class="button" id="close">Close</button>
           </footer>
         </div>
@@ -83,8 +78,11 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a href="../index.html">
-              <img src="./pageicon.svg" width="112" height="28">
-              <!-- (要修正) change icon! yokonaganisuru-->
+              <!-- <img src="./pageicon.svg" width="112" height="28"> -->
+              <h3 class="is-3 is-vertical-center mr-5">
+              <img src="./pageicon.svg" width="60" height="60">
+              <p class="is-size-3 has-text-black">Simple Chat</p>
+              </h3>
           </a>
 
           <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -121,13 +119,6 @@
           </div>
         </div>
       </nav>
-
-    <!-- Title -->
-   <div class="columns is-centered mb-5 mt-5">
-    <div class="column is-8">
-    <h1 class="title is-1 has-text-centered ">Simple Chat</h1>
-    </div>
-   </div>
 
    <div class="columns is-centered">
     <div class="column is-6">
