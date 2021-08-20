@@ -31,7 +31,6 @@
         exit;
     }
 
-
     $fp = fopen('message.log', 'r');
     if (flock($fp, LOCK_SH)) {
         while (!feof($fp)) {
@@ -48,5 +47,5 @@
     $strMsg = $sender . ',' . date("Y-m-d H:i:s") . ',' . $message . "\n" . $strMsg;
     file_put_contents('message.log', $strMsg, LOCK_EX);
 
-    echo "succeed";
+    echo "succeed"; 
 ?>
