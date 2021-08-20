@@ -18,14 +18,14 @@
 
     // on_load process : check page ip from config.json
     $(function(){
-      url = 'config.json';
+      url = 'serverinfo.php';
       $.getJSON(url, (data) => {
-        $("#myip").text(data.ip);
-        console.log(`ip=${data.ip}`);
+        var loc = location.pathname,
+        dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
+        $("#myip").html(`${data.SERVER_ADDR} <br /> ${dir}`);
       });
     });
     // (要修正) configで自分の名前, icon種類など簡単な設定を変えられるように.
-    // (要修正) message log を閲覧する機能つける. 浮き上がらせる感じで.
 
     $(document).ready(function() {
         // Check for click events on the navbar burger icon
@@ -46,7 +46,6 @@
         $("#update").on("click", function() {
             $('#iframe_id')[0].contentDocument.location.reload(true);
         })
-
     });
 
   </script>
