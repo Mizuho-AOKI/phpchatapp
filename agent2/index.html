@@ -24,8 +24,11 @@
         dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
         $("#myip").html(`${data.SERVER_ADDR} <br /> ${dir}`);
       });
+      $.get("serverinfo.php", function(data){
+        $("#serverinfo").html(`<pre>${data}</pre>`);
+      });
     });
-    // (要修正) configで自分の名前, icon種類など簡単な設定を変えられるように.
+    // (要修正) configで自分の名前(不要？いや, いる), icon種類(10種類から選ぶ, icon0~icon9), 色(カラーピッカーから取得)など簡単な設定を変えられるように.
 
     $(document).ready(function() {
         // Check for click events on the navbar burger icon
@@ -34,17 +37,27 @@
             $(".navbar-burger").toggleClass("is-active");
             $(".navbar-menu").toggleClass("is-active");
         });
-
-        // Modal controller
-        $("#open").on("click", function() {
+        // Volume toggle
+        $("div[name='volume']").click(function() {
+            // Toggle the "is-active" class on the volume icon.
+            $("div[name='volume'] img").fadeToggle(0);
+            $("div[name='volume'] img").toggleClass("volume-active");            
+        });
+        // Modal controller for mesasge log
+        $("#open_msglog").on("click", function() {
             $('#iframe_id')[0].contentDocument.location.reload(true);
-            $("div.modal").addClass("is-active");
-        })
-        $("#cancel, #close, div.modal-background").on("click", function() {
-            $("div.modal").removeClass("is-active");
+            $("div.modal[name='msglog']").addClass("is-active");
         })
         $("#update").on("click", function() {
             $('#iframe_id')[0].contentDocument.location.reload(true);
+        })
+        // Modal controller for server info
+        $("#open_serverinfo").on("click", function() {
+            $("div.modal[name='serverinfo']").addClass("is-active");
+        })
+        // Close modal windows
+        $("button[name='cancel'], button[name='close'], div.modal-background").on("click", function() {
+            $("div.modal").removeClass("is-active");
         })
     });
 
@@ -53,13 +66,13 @@
 </head>
  <body>
 
-    <!-- Modal window -->
-    <div class="modal">
+    <!-- Modal window for ./message.log -->
+    <div class="modal" name="msglog">
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">message.log</p>
-            <button class="delete" id="cancel"></button>
+            <button class="delete" name="cancel"></button>
           </header>
           <section class="modal-card-body">
             <!-- Modal content ... -->
@@ -67,10 +80,27 @@
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success" id="update">Update</button>
-            <button class="button" id="close">Close</button>
+            <button class="button" name="close">Close</button>
           </footer>
         </div>
     </div>
+
+    <!-- Modal window for ./serverinfo.php -->
+    <div class="modal" name="serverinfo" >
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Server Info</p>
+          <button class="delete" name="cancel"></button>
+        </header>
+        <section id="serverinfo" class="modal-card-body">
+          <!-- Modal content ... -->
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" name="close">Close</button>
+        </footer>
+      </div>
+  </div>
 
     <!-- Navigation bar -->
     <!-- Ref : https://bulma.io/documentation/components/navbar/ -->
@@ -84,14 +114,14 @@
               </h3>
           </a>
 
-          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="simplenavbar">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
           </a>
         </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
+        <div id="simplenavbar" class="navbar-menu">
           <div class="navbar-start">
             <a class="navbar-item" href="../index.html">
               Home
@@ -101,13 +131,22 @@
               Documentation
             </a> -->
 
-            <a class="navbar-item" id="open">
-                Msg Log
+            <a class="navbar-item" id="open_serverinfo">
+                Server Info
             </a>
 
+            <a class="navbar-item" id="open_msglog">
+                Msg Log
+          </a>
+
           </div>
-      
+
           <div class="navbar-end">
+              <!-- <img src="./pageicon.svg" width="112" height="28"> -->
+            <div class="navbar-item" name="volume">
+              <img src="./volumeon.png"  id="volumeon" width="30" height="35" class="volume-active">
+              <img src="./volumeoff.png" id="volumeoff" width="30" height="35" style="display:none;">
+            </div>
             <div class="navbar-item">
               <div class="buttons">
                 <button class="button is-danger" onclick="deleteMessage()">
@@ -204,7 +243,6 @@
     <source src="delete.mp3" type="audio/mp3">
 </audio>
 
-<!-- (要修正) ミュート機能 -->
 <!-- (要修正) メディアはフォルダを分ける. -->
 <!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
 </body>
