@@ -131,6 +131,7 @@ function writeMessage() {
                             readMessage();
                             $("#message").val('');
                             $('#messageTextBox').append(msghtml);
+                            $("#message").focus();
                             if(!isMuted()){
                                 // play send.mp3
                                 $("#SendSound").prop('currentTime', 0);
@@ -147,6 +148,7 @@ function writeMessage() {
         },
         function(){
             window.alert("Error sending the message.");
+            $("#targetip").focus();
         }
     );
 }
