@@ -159,7 +159,7 @@ function Lmsg(sender, msg){
     <!-- Chat box (left) -->
     <div class="sb-box">
         <div class="icon-img icon-img-left">
-        <img src="./icon.png" />
+        <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-left -->
         <div class="icon-name icon-name-left">${sender}</div>
         <div class="sb-side sb-side-left">
@@ -180,7 +180,7 @@ function Rmsg(sender, msg){
     <!-- Chat box (right) -->
     <div class="sb-box">
         <div class="icon-img icon-img-right">
-            <img src="./icon.png" />
+            <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">${sender}</div>
         <div class="sb-side sb-side-right">

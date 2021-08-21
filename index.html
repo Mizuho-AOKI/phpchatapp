@@ -3,29 +3,50 @@
     <html lang="ja">
      <head>
      <meta charset="utf-8">
-     <title>Apache Test Page</title>
+     <title>Simple Chat</title>
      <meta name="description" content="input description here ">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <link rel=”shortcut icon” href=“favicon.ico”>
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"> 
      </head>
      <body>
-    
+
+    <!-- Navigation bar -->
+    <!-- Ref : https://bulma.io/documentation/components/navbar/ -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a href="../index.html">
+              <!-- <img src="./pageicon.svg" width="112" height="28"> -->
+              <h3 class="is-3 mr-5" style = "display: flex; align-items: center;">
+              <img src="./agent2/media/pageicon.svg" width="60" height="60">
+              <p class="is-size-3 has-text-black">Simple Chat</p>
+              </h3>
+          </a>
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="simplenavbar">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      </nav>
+
     <!-- title -->
      <div class="columns is-centered mb-5 mt-5">
         <div class="column is-9 has-text-centered">
-            <h1 class="title is-2">Index.html</h1>
+            <h1 class="title is-2">Index</h1>
         </div>
     </div>
 
+    <!-- Navbarを追加 -->
     <!-- (要修正) サイトマップはtree.phpみたいに自動で取得して可視化する -->
+    <!-- (要修正) tree.php, arp.phpなども少しレイアウトなおす -->
 
     <!-- site map -->
     <div class="columns is-centered mb-5 mt-5">
         <div class="column is-4">
         <aside class="menu">
             <ul class="menu-list">
-
+            <!-- (要修正) chat.jsを含むフォルダを列挙, index.htmlへ飛ばす -->
             <li>
                 <a class="is-active">Chat agents</a>
                 <ul>
@@ -34,7 +55,7 @@
                 </ul>
             </li>
             </ul>
-
+            <!-- (要修正) 同階層のphpをすべて列挙 -->
             <ul class="menu-list mt-5">
                 <li>
                 <a class="is-active">For debug</a>
@@ -42,11 +63,9 @@
                     <li><a href="./arp.php"               target="_blank" rel="noopener noreferrer"> ./arp.php              </a></li>
                     <li><a href="./tree.php"              target="_blank" rel="noopener noreferrer"> ./tree.php              </a></li>
                     <li><a href="./test.php"              target="_blank" rel="noopener noreferrer"> ./test.php              </a></li>
-                    <li><a href="./apache_default.html"     target="_blank" rel="noopener noreferrer"> ./apache_default.html     </a></li>
                 </ul>
                 </li>
             </ul>
-
         </aside>
         </div>
       </div>

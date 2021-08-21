@@ -1,11 +1,10 @@
 <!-- Simple chat agent -->
-<!-- # Set your page ip on the "./config.json" file. -->
 
 <!DOCTYPE html>
 <html lang="ja">
  <head>
  <meta charset="utf-8">
- <title>Apache Test Page</title>
+ <title>Simple Chat</title>
  <meta name="description" content="input description here">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -29,6 +28,7 @@
       });
     });
     // (要修正) configで自分の名前(不要？いや, いる), icon種類(10種類から選ぶ, icon0~icon9), 色(カラーピッカーから取得)など簡単な設定を変えられるように.
+    // color picker https://github.com/bgrins/spectrum
 
     $(document).ready(function() {
         // Check for click events on the navbar burger icon
@@ -100,20 +100,18 @@
           <button class="button" name="close">Close</button>
         </footer>
       </div>
-  </div>
+    </div>
 
     <!-- Navigation bar -->
     <!-- Ref : https://bulma.io/documentation/components/navbar/ -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a href="../index.html">
-              <!-- <img src="./pageicon.svg" width="112" height="28"> -->
-              <h3 class="is-3 is-vertical-center mr-5">
-              <img src="./pageicon.svg" width="60" height="60">
+              <h3 class="is-3 mr-5" style = "display: flex; align-items: center;">
+              <img src="./media/pageicon.svg" width="60" height="60">
               <p class="is-size-3 has-text-black">Simple Chat</p>
               </h3>
           </a>
-
           <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="simplenavbar">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -123,29 +121,15 @@
 
         <div id="simplenavbar" class="navbar-menu">
           <div class="navbar-start">
-            <a class="navbar-item" href="../index.html">
-              Home
-            </a>
-
-            <!-- <a class="navbar-item">
-              Documentation
-            </a> -->
-
-            <a class="navbar-item" id="open_serverinfo">
-                Server Info
-            </a>
-
-            <a class="navbar-item" id="open_msglog">
-                Msg Log
-          </a>
-
+            <a class="navbar-item" href="../index.html">Home</a>
+            <a class="navbar-item" id="open_serverinfo">Server Info</a>
+            <a class="navbar-item" id="open_msglog">Msg Log</a>
           </div>
 
           <div class="navbar-end">
-              <!-- <img src="./pageicon.svg" width="112" height="28"> -->
             <div class="navbar-item" name="volume">
-              <img src="./volumeon.png"  id="volumeon" width="30" height="35" class="volume-active">
-              <img src="./volumeoff.png" id="volumeoff" width="30" height="35" style="display:none;">
+              <img src="./media/volumeon.png"  id="volumeon" width="30" height="35" class="volume-active">
+              <img src="./media/volumeoff.png" id="volumeoff" width="30" height="35" style="display:none;">
             </div>
             <div class="navbar-item">
               <div class="buttons">
@@ -163,7 +147,7 @@
     <!-- Box to send message -->
     <div class="sb-box">
         <div class="icon-img icon-img-right">
-            <img src="./icon.png" />
+            <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-right -->
         <div id="myip" class="icon-name icon-name-right">Me</div>
         <div class="sb-side sb-side-right">
@@ -195,13 +179,12 @@
    </div>
 
 <div class="columns is-centered">
-
   <div id="messageTextBox" class = "column is-6">
 
     <!-- Chat box (left) -->
     <div class="sb-box">
         <div class="icon-img icon-img-left">
-        <img src="./icon.png" />
+        <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-left -->
         <div class="icon-name icon-name-left">Left</div>
         <div class="sb-side sb-side-left">
@@ -215,7 +198,7 @@
     <!-- Chat box (right) -->
     <div class="sb-box">
         <div class="icon-img icon-img-right">
-            <img src="./icon.png" />
+            <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">Right</div>
         <div class="sb-side sb-side-right">
@@ -227,21 +210,12 @@
     <!-- / Chat box (right) -->
 
     </div> 
-
 </div>
 
 <!-- sound -->
-<audio id="SendSound" preload="auto">
-    <source src="send.mp3" type="audio/mp3">
-</audio>
-
-<audio id="RecvSound" preload="auto">
-    <source src="receive.mp3" type="audio/mp3">
-</audio>
-
-<audio id="DeleteSound" preload="auto">
-    <source src="delete.mp3" type="audio/mp3">
-</audio>
+<audio id="SendSound" preload="auto"><source src="media/send.mp3" type="audio/mp3"></audio>
+<audio id="RecvSound" preload="auto"><source src="media/receive.mp3" type="audio/mp3"></audio>
+<audio id="DeleteSound" preload="auto"><source src="media/delete.mp3" type="audio/mp3"></audio>
 
 <!-- (要修正) メディアはフォルダを分ける. -->
 <!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->

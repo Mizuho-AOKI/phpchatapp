@@ -1,5 +1,17 @@
 // ref: https://www.taru-net.jp/tec/javascript-chat/
 
+// Check if it is muted or not.
+function isMuted(){
+    if($("#volumeon").hasClass('volume-active')){
+        // not mute
+        return false;
+    }else{
+        // mute
+        return true;
+    }
+}
+
+
 function deleteMessage() {
     msg = "Delete all messages?";
     if(window.confirm(msg)){
@@ -12,10 +24,12 @@ function deleteMessage() {
         .then(
             function (deleteflag) {
                 if(deleteflag=="succeed"){
-                    // play sound.mp3
-                    $("#DeleteSound").prop('currentTime', 0);
-                    $("#DeleteSound").prop('volume', 1);
-                    $("#DeleteSound").get(0).play();
+                    if(!isMuted()){
+                        // play delete.mp3
+                        $("#DeleteSound").prop('currentTime', 0);
+                        $("#DeleteSound").prop('volume', 1);
+                        $("#DeleteSound").get(0).play();
+                    }
                 }
             },
             function () {
@@ -40,7 +54,7 @@ function readMessage() {
             var latestmsg = lines[0].split(',')
 
             if(latestmsg[0] !== 'Me' && $("div[name='msg_l']").eq(0).text() && latestmsg[2] 
-               && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[2]) == -1) ){
+               && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[2]) == -1) && !isMuted() ){
                 // play receive.mp3
                 $("#RecvSound").prop('currentTime', 0);
                 $("#RecvSound").prop('volume', 1);
@@ -74,6 +88,14 @@ function readMessage() {
         }
     );
 }
+
+// Check received message every 1 seconds
+$(document).ready(function() {
+    readMessage();
+    setInterval('readMessage()', 1000);
+});
+
+
 
 function writeMessage() {
 
@@ -109,10 +131,13 @@ function writeMessage() {
                             readMessage();
                             $("#message").val('');
                             $('#messageTextBox').append(msghtml);
-                            // play sound.mp3
-                            $("#SendSound").prop('currentTime', 0);
-                            $("#SendSound").prop('volume', 1);
-                            $("#SendSound").get(0).play();
+                            $("#message").focus();
+                            if(!isMuted()){
+                                // play send.mp3
+                                $("#SendSound").prop('currentTime', 0);
+                                $("#SendSound").prop('volume', 1);
+                                $("#SendSound").get(0).play();
+                            }
                         }
                     },
                     function () {
@@ -123,16 +148,10 @@ function writeMessage() {
         },
         function(){
             window.alert("Error sending the message.");
+            $("#targetip").focus();
         }
     );
 }
-
-// check received message every 1 seconds
-$(document).ready(function() {
-    readMessage();
-    setInterval('readMessage()', 1000);
-});
-
 
 function Lmsg(sender, msg){
 
