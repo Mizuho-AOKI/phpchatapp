@@ -8,6 +8,7 @@
  <meta name="description" content="input description here">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+ <script src="./inlinesvg.js"></script>
  <script src="./chat.js"></script>
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
  <link href="./chat.css" rel="stylesheet"> 
@@ -16,21 +17,91 @@
  <script language="javascript" type="text/javascript">
 
     // on_load process : check page ip from config.json
-    $(function(){
-      url = 'serverinfo.php';
-      $.getJSON(url, (data) => {
-        var loc = location.pathname,
-        dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
-        $("#myip").html(`${data.SERVER_ADDR} <br /> ${dir}`);
-      });
-      $.get("serverinfo.php", function(data){
-        $("#serverinfo").html(`<pre>${data}</pre>`);
-      });
-    });
+    // $(function(){
+    //   url = 'serverinfo.php';
+    //   $.getJSON(url, (data) => {
+    //     var loc = location.pathname,
+    //     dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
+    //     $("#myip").html(`${data.SERVER_ADDR} <br /> ${dir}`);
+    //   });
+    //   $.get("serverinfo.php", function(data){
+    //     $("#serverinfo").html(`<pre>${data}</pre>`);
+    //   });
+    // });
+    // updateProfile();
+
+
     // (要修正) configで自分の名前(不要？いや, いる), icon種類(10種類から選ぶ, icon0~icon9), 色(カラーピッカーから取得)など簡単な設定を変えられるように.
     // color picker https://github.com/bgrins/spectrum
+    // profileで設定する情報リスト
+    // 1. 自分の名前 → 届いたら表示されるようにもする.
+    // 2. アイコン(0~9から選ぶ)
+    // 3. アイコンの色(5種類くらいから選ぶ？
+
+
+    function saveProfile(){
+      // save profile settings
+      console.log($("form[name='profile'] #name").val());
+      console.log($("form[name='profile'] select").val());
+      console.log($("form[name='profile'] #colorpicker").val());   
+      $.ajax({
+          type: 'post',
+          url: `./saveprofile.php`,
+          data: {
+              'name'  : $("form[name='profile'] #name").val(),
+              'icon'  : $("form[name='profile'] select").val(),
+              'color' : $("form[name='profile'] #colorpicker").val()
+          }
+      })
+      .then(
+          function(result){
+          },
+          function(){
+              window.alert("Error saving the profile.");
+          }
+      );
+    }
+
+    function updateProfile() {
+      // var fig = document.getElementByID('usericondebug').contentDocument;
+      // $fig = $(fig);
+      // $fig.css({'fill': '#EC0D50'});
+
+      // inlineSvg("div[name='usericon'] img");
+      // inlineSvg("#usericondebug");
+      // $("div[name='usericon']").find("path").attr("style","fill:blue");
+      // $("div[name='usericon']").find("path").css({'fill':'blue'});
+      // ここ, バグってる！ 直し中
+      // window.alert($("#usericondebug").html());
+
+      var username, myip;
+      $.getJSON('profile.json', (data) => {
+        username = `${data.name} <br />`;
+        $("div[name='usericon'] img").attr('src', `./media/icons/${data.icon}.svg`);
+        // fill input field of username
+        if($("#usernameinput").val() == ''){
+          $("#usernameinput").val(data.name)
+        }
+      })
+      .then(
+          function(){
+            $.getJSON('serverinfo.php', (data) => {
+              var loc = location.pathname;
+              var dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
+              myip = `${data.SERVER_ADDR} <br /> ${dir}`;
+              $("div[name='username']").html(username + myip)
+            });
+          },
+          function(){
+              window.alert("Error saving the profile.");
+          }
+      );
+    }
 
     $(document).ready(function() {
+        // loading profile
+        updateProfile();
+
         // Check for click events on the navbar burger icon
         $(".navbar-burger").click(function() {
             // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
@@ -43,6 +114,10 @@
             $("div[name='volume'] img").fadeToggle(0);
             $("div[name='volume'] img").toggleClass("volume-active");            
         });
+        // Modal controller for setting window
+        $("#open_setting").on("click", function() {
+            $("div.modal[name='setting']").addClass("is-active");
+        })
         // Modal controller for mesasge log
         $("#open_msglog").on("click", function() {
             $('#iframe_id')[0].contentDocument.location.reload(true);
@@ -59,12 +134,102 @@
         $("button[name='cancel'], button[name='close'], div.modal-background").on("click", function() {
             $("div.modal").removeClass("is-active");
         })
+        // when profile setting chenges:
+        $("form[name='profile']").change(function() {
+            // 情報取得
+            console.log($("form[name='profile'] #name").val());
+            console.log($("form[name='profile'] select").val());
+            console.log($("form[name='profile'] #colorpicker").val());            
+
+            // save profile.json
+            saveProfile();
+            
+            // update profile on the page
+            updateProfile();
+
+            // プレビュー, 本ページ画像変更, 色も変更
+            // $("div[name='username']").text($("form[name='profile'] #name").val());
+            // $("div[name='username']").text($("form[name='profile'] #name").val());            
+
+            // 送信する情報増やす
+
+        })
     });
 
   </script>
 
 </head>
  <body>
+
+    <!-- Modal window for setting -->
+    <div class="modal" name="setting">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Setting</p>
+          <button class="delete" name="cancel"></button>
+        </header>
+        <section class="modal-card-body">
+        <!-- Modal content ... -->
+      <div class="columns">
+        <div class="column is-6">
+        <form name="profile">
+          <div class="field">
+            <label class="label">Name</label>
+            <!-- onchangeで右のプレビュー & 本来ページの一番上も変える.  -->
+            <div class="control">
+              <input class="input" id="usernameinput" type="text" id="name" placeholder="Input your name">
+              <!-- 名前はページ読み込み時にconfigの値を入れる. updateprofile実行だけでおけ. -->
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Icon</label>
+            <div class="control">
+              <div class="select">
+                <!-- changeしたら, 右のプロフィールが変更されるように. 本来ページも変える.-->
+                <select>
+                  <option>badguy</option>
+                  <option>goodboy</option>
+                  <option>pig</option>
+                  <option>tulip</option>
+                  <option>knight</option>
+                  <option>shrimp</option>
+                  <option>cherry</option>
+                  <option>squirrel</option>
+                  <option>fish</option>
+                  <option>dna</option>
+                </select>
+              </div>
+            </div>
+            <div class="control mt-2">
+              <!-- changeしたら, 右のプロフィール・本来ページ変える.  -->
+            <!-- <input type="color" id="colorpicker" name="head" value="#e66465"> -->
+            </div>
+          </div>
+        </form>
+        </div>
+        <div class="column is-6 is-vertical-center">
+          <!-- Chat box (right) -->
+          <div class="sb-box">
+            <div name="usericon" class="icon-img icon-img-right">
+                <img src="./media/icons/badguy.svg" />
+            </div><!-- /.icon-img icon-img-right -->
+            <div name="username" class="icon-name icon-name-right">name</div>
+            <div class="sb-side sb-side-right">
+                <div name="msg_r_default" class="sb-txt sb-txt-right">
+                    Profile setting
+                </div><!-- /.sb-txt sb-txt-right -->
+            </div><!-- /.sb-side sb-side-right -->
+          </div><!-- /.sb-box -->
+          <!-- / Chat box (right) -->
+        </div>
+
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" name="close">OK</button>
+        </footer>
+      </div>
+  </div>
 
     <!-- Modal window for ./message.log -->
     <div class="modal" name="msglog">
@@ -77,6 +242,7 @@
           <section class="modal-card-body">
             <!-- Modal content ... -->
             <iframe src="./message.log" id="iframe_id" width="100%"></iframe>
+            <!-- <iframe src="./profile.json" id="iframe_id" width="100%"></iframe> -->
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success" id="update">Update</button>
@@ -127,6 +293,7 @@
           </div>
 
           <div class="navbar-end">
+            <a class="navbar-item" id="open_setting">Profile</a> <!-- 設定ぽいアイコンにしてもいいね. -->
             <div class="navbar-item" name="volume">
               <img src="./media/volumeon.png"  id="volumeon" width="30" height="35" class="volume-active">
               <img src="./media/volumeoff.png" id="volumeoff" width="30" height="35" style="display:none;">
@@ -146,10 +313,10 @@
     <div class="column is-6">
     <!-- Box to send message -->
     <div class="sb-box">
-        <div class="icon-img icon-img-right">
-            <img src="./media/icon.png" />
-        </div><!-- /.icon-img icon-img-right -->
-        <div id="myip" class="icon-name icon-name-right">Me</div>
+        <div name="usericon" class="icon-img icon-img-right">
+            <img id="usericondebug" src="./media/icon.png" />
+        </div><!-- /.icon-img icon-img-ri            console.log($("form[name='profile'] input").val());ght -->
+        <div id="myip" name="username" class="icon-name icon-name-right">Me</div>
         <div class="sb-side sb-side-right">
             <div class="sb-txt sb-txt-right">
                 <form method="post" onsubmit="writeMessage(); return false;">
@@ -217,7 +384,6 @@
 <audio id="RecvSound" preload="auto"><source src="media/receive.mp3" type="audio/mp3"></audio>
 <audio id="DeleteSound" preload="auto"><source src="media/delete.mp3" type="audio/mp3"></audio>
 
-<!-- (要修正) メディアはフォルダを分ける. -->
 <!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
 </body>
 </html>
