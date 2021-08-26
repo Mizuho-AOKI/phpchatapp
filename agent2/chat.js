@@ -108,11 +108,12 @@ function writeMessage() {
     // send message to the target IP address.
     $.ajax({
         type: 'post',
-        url: `http://${targetip}/receiver.php`,
+        url: `${location.protocol}//${targetip}/receiver.php`,
         data: {
             'message' : $("#message").val(),
-            'sender'  : `http://${myip}`
+            'sender'  : `${location.protocol}//${myip}`
         }
+        // (要修正) http, https 両方対応する？
     })
     .then(
         function(result){
