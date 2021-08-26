@@ -113,7 +113,7 @@ function writeMessage() {
             'message' : $("#message").val(),
             'sender'  : `${location.protocol}//${myip}`
         }
-        // (要修正) http, https 両方対応する？
+        // (要修正) 相手が自分と同じ通信プロトコル(http, https)であることを前提にしている. 良いのか？
     })
     .then(
         function(result){
