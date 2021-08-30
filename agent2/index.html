@@ -17,20 +17,6 @@
 <!-- (要修正) onload.jsにまとめて外部ファイルにする. -->
  <script language="javascript" type="text/javascript">
 
-    // on_load process : check page ip from config.json
-    // $(function(){
-    //   url = 'serverinfo.php';
-    //   $.getJSON(url, (data) => {
-    //     var loc = location.pathname,
-    //     dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
-    //     $("#myip").html(`${data.SERVER_ADDR} <br /> ${dir}`);
-    //   });
-    //   $.get("serverinfo.php", function(data){
-    //     $("#serverinfo").html(`<pre>${data}</pre>`);
-    //   });
-    // });
-    // updateProfile();
-
 
     // (要修正) configで自分の名前(不要？いや, いる), icon種類(10種類から選ぶ, icon0~icon9), 色(カラーピッカーから取得)など簡単な設定を変えられるように.
     // color picker https://github.com/bgrins/spectrum
@@ -40,7 +26,7 @@
     // 3. アイコンの色(5種類くらいから選ぶ？
 
 
-    function saveProfile(){
+    function saveProfile(initialFlag){
       // save profile settings
       console.log($("form[name='profile'] #usernameinput").val());
       console.log($("form[name='profile'] select").val());
@@ -56,6 +42,9 @@
       })
       .then(
           function(result){
+            if(!initialFlag){
+              updateProfile();
+            }
           },
           function(){
               window.alert("Error saving the profile.");
@@ -63,25 +52,12 @@
       );
     }
 
-    function updateProfile() {
-      // var fig = document.getElementByID('usericondebug').contentDocument;
-      // $fig = $(fig);
-      // $fig.css({'fill': '#EC0D50'});
-
-      // inlineSvg("div[name='usericon'] img");
-      // inlineSvg("#usericondebug", "#ea11ff");
-      // inlineSvg("div[name='usericon'] img", "#ea11ff");
-      // $("div[name='usericon']").find("path").attr("style","fill:blue");
-      // $("div[name='usericon'] .st0").css({'fill':'red'});
-      // ここ, バグってる！ 直し中
-      // window.alert($("#usericondebug").html());
-
+    function updateProfile(initialFlag) {
+      // update profile appearance
       var username, myip;
       $.getJSON('profile.json', (data) => {
         username = `${data.name} <br />`;
         // replace icon img
-        // $("div[name='usericon'] img").attr('src', `./media/icons/${data.icon}.svg`);
-        window.alert(`${data.name}, ${data.icon}, ${data.color}`);
         inlineSvg("div[name='usericon'] img,svg", data.color,`./media/icons/${data.icon}.svg`);
         $("form[name='profile'] select").val(data.icon);
         $("form[name='profile'] #colorpicker").val(data.color);
@@ -98,7 +74,10 @@
               var dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
               myip = `${data.SERVER_ADDR} <br /> ${dir}`;
               // overwrite myname
-              $("div[name='username']").html(username + myip)
+              $("div[name='username']").html(username + myip);
+              if(initialFlag){
+                saveProfile(initialFlag);
+              }
             });
           },
           function(){
@@ -109,7 +88,7 @@
 
     $(document).ready(function() {
         // loading profile
-        updateProfile();
+        updateProfile(initialFlag=true);
 
         // Check for click events on the navbar burger icon
         $(".navbar-burger").click(function() {
@@ -151,10 +130,10 @@
             console.log($("form[name='profile'] #colorpicker").val());            
 
             // save profile.json
-            saveProfile();
+            saveProfile(initialFlag=false);
             
             // update profile on the page
-            updateProfile();
+            // updateProfile();
 
             // プレビュー, 本ページ画像変更, 色も変更
             // $("div[name='username']").text($("form[name='profile'] #name").val());
