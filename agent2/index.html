@@ -69,9 +69,10 @@
       // $fig.css({'fill': '#EC0D50'});
 
       // inlineSvg("div[name='usericon'] img");
-      // inlineSvg("#usericondebug");
+      // inlineSvg("#usericondebug", "#ea11ff");
+      // inlineSvg("div[name='usericon'] img", "#ea11ff");
       // $("div[name='usericon']").find("path").attr("style","fill:blue");
-      // $("div[name='usericon']").find("path").css({'fill':'blue'});
+      // $("div[name='usericon'] .st0").css({'fill':'red'});
       // ここ, バグってる！ 直し中
       // window.alert($("#usericondebug").html());
 
@@ -79,12 +80,15 @@
       $.getJSON('profile.json', (data) => {
         username = `${data.name} <br />`;
         // replace icon img
-        $("div[name='usericon'] img").attr('src', `./media/icons/${data.icon}.svg`);
+        // $("div[name='usericon'] img").attr('src', `./media/icons/${data.icon}.svg`);
+        window.alert(`${data.name}, ${data.icon}, ${data.color}`);
+        inlineSvg("div[name='usericon'] img,svg", data.color,`./media/icons/${data.icon}.svg`);
         $("form[name='profile'] select").val(data.icon);
+        $("form[name='profile'] #colorpicker").val(data.color);
         // fill input field of username
         if($("#usernameinput").val() == ''){
           // when the page is initially loaded, fill the input form with your profile.json
-          $("#usernameinput").val(data.name)
+          $("form[name='profile'] #usernameinput").val(data.name);
         }
       })
       .then(
@@ -208,7 +212,7 @@
             </div>
             <div class="control mt-2">
               <!-- changeしたら, 右のプロフィール・本来ページ変える.  -->
-            <!-- <input type="color" id="colorpicker" name="head" value="#e66465"> -->
+            <input type="color" id="colorpicker" name="head" value="#e66465">
             </div>
           </div>
         </form>
