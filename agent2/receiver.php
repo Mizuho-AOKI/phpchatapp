@@ -1,7 +1,8 @@
 <?php
-
     // avoid the cross-domain constraint
     header("Access-Control-Allow-Origin: *");  
+    // avoid the cross-origin resource sharing constraint
+    header('Access-Control-Allow-Credentials: true');
 
     $count = 0;
     $strMsg   = '';
@@ -14,7 +15,7 @@
     // if ($request !== 'xmlhttprequest') {
     //     exit;
     // }
- 
+
     $message = '';
     $sender  = '';
     if (isset($_POST['message']) && is_string($_POST['message'])) {
