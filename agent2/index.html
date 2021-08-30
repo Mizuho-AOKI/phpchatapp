@@ -42,14 +42,14 @@
 
     function saveProfile(){
       // save profile settings
-      console.log($("form[name='profile'] #name").val());
+      console.log($("form[name='profile'] #usernameinput").val());
       console.log($("form[name='profile'] select").val());
       console.log($("form[name='profile'] #colorpicker").val());   
       $.ajax({
           type: 'post',
           url: `./saveprofile.php`,
           data: {
-              'name'  : $("form[name='profile'] #name").val(),
+              'name'  : $("form[name='profile'] #usernameinput").val(),
               'icon'  : $("form[name='profile'] select").val(),
               'color' : $("form[name='profile'] #colorpicker").val()
           }
@@ -78,9 +78,12 @@
       var username, myip;
       $.getJSON('profile.json', (data) => {
         username = `${data.name} <br />`;
+        // replace icon img
         $("div[name='usericon'] img").attr('src', `./media/icons/${data.icon}.svg`);
+        $("form[name='profile'] select").val(data.icon);
         // fill input field of username
         if($("#usernameinput").val() == ''){
+          // when the page is initially loaded, fill the input form with your profile.json
           $("#usernameinput").val(data.name)
         }
       })
@@ -90,6 +93,7 @@
               var loc = location.pathname;
               var dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
               myip = `${data.SERVER_ADDR} <br /> ${dir}`;
+              // overwrite myname
               $("div[name='username']").html(username + myip)
             });
           },
@@ -138,7 +142,7 @@
         // when profile setting chenges:
         $("form[name='profile']").change(function() {
             // 情報取得
-            console.log($("form[name='profile'] #name").val());
+            console.log($("form[name='profile'] #usernameinput").val());
             console.log($("form[name='profile'] select").val());
             console.log($("form[name='profile'] #colorpicker").val());            
 
@@ -218,7 +222,7 @@
             <div name="username" class="icon-name icon-name-right">name</div>
             <div class="sb-side sb-side-right">
                 <div name="msg_r_default" class="sb-txt sb-txt-right">
-                    Profile setting
+                    Profile Setting
                 </div><!-- /.sb-txt sb-txt-right -->
             </div><!-- /.sb-side sb-side-right -->
           </div><!-- /.sb-box -->
@@ -315,7 +319,7 @@
     <!-- Box to send message -->
     <div class="sb-box">
         <div name="usericon" class="icon-img icon-img-right">
-            <img id="usericondebug" src="./media/icon.png" />
+            <img id="usericondebug" src="./media/icons/badguy.svg" />
         </div><!-- /.icon-img icon-img-ri            console.log($("form[name='profile'] input").val());ght -->
         <div id="myip" name="username" class="icon-name icon-name-right">Me</div>
         <div class="sb-side sb-side-right">
@@ -352,7 +356,7 @@
     <!-- Chat box (left) -->
     <div class="sb-box">
         <div class="icon-img icon-img-left">
-        <img src="./media/icon.png" />
+        <img src="./media/icons/badguy.svg" />
         </div><!-- /.icon-img icon-img-left -->
         <div class="icon-name icon-name-left">Left</div>
         <div class="sb-side sb-side-left">
