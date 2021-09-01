@@ -16,8 +16,21 @@
     //     exit;
     // }
 
+    // keep messages as local variables
+    $name = '';
+    $icon = '';
+    $color = '';
     $message = '';
     $sender  = '';
+    if (isset($_POST['name']) && is_string($_POST['name'])) {
+        $name = htmlspecialchars($_POST['name'], ENT_QUOTES);
+    }
+    if (isset($_POST['icon']) && is_string($_POST['icon'])) {
+        $icon = htmlspecialchars($_POST['icon'], ENT_QUOTES);
+    }
+    if (isset($_POST['color']) && is_string($_POST['color'])) {
+        $color = htmlspecialchars($_POST['color'], ENT_QUOTES);
+    }
     if (isset($_POST['message']) && is_string($_POST['message'])) {
         $message = $_POST['message']; // non-sanitize
         // $message = htmlspecialchars($_POST['message'], ENT_QUOTES); //sanitized
@@ -26,9 +39,8 @@
     if (isset($_POST['sender']) && is_string($_POST['sender'])) {
         $sender = htmlspecialchars($_POST['sender'], ENT_QUOTES);
     }
-
-    // message was invalid.
-    if ($message == '' || $sender == '') {
+    // if message was invalid :
+    if ($name == '' || $icon == '' || $color == '' || $message == '' || $sender == '') {
         exit;
     }
 
@@ -44,9 +56,9 @@
     }
     flock($fp, LOCK_UN);
     fclose($fp);
-
-    $strMsg = $sender . ',' . date("Y-m-d H:i:s") . ',' . $message . "\n" . $strMsg;
+    // update $strMsg 
+    $strMsg = $name . ',' . $icon . ',' . $color . ',' . $sender . ',' . date("Y-m-d H:i:s") . ',' . $message . "\n" . $strMsg;
     file_put_contents('message.log', $strMsg, LOCK_EX);
 
-    echo "succeed"; 
+    echo "succeed";
 ?>

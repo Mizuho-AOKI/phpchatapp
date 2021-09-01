@@ -30,8 +30,8 @@
     border-radius: 50%; /* 画像を丸く表示する */
     border: 2px solid #eee; /* 画像の縁取りの太さとカラー */
   }
-  /* アイコンネーム */
-  .icon-name {
+  /* アイコンネーム 大きめ */
+  .icon-name-big {
     position: absolute;
     /* width: 80px; ネームの最大幅を画像と同じに */
     text-align: center; /* ネームの位置をセンターに */
@@ -39,12 +39,21 @@
     color: #777; /* ネームのカラー */
     font-size: 10px; /* ネームのフォントサイズ */
   }
+  /* アイコンネーム */
+  .icon-name {
+    position: absolute;
+    /* width: 80px; ネームの最大幅を画像と同じに */
+    text-align: center; /* ネームの位置をセンターに */
+    top: 65px; /* ネームの位置を上から65に */
+    color: #777; /* ネームのカラー */
+    font-size: 10px; /* ネームのフォントサイズ */
+  }
   /* アイコンネーム（左） */
-  .icon-name-left {
+  .icon-name-left{
     left: 0; /* ネームの位置を左から0に */
   }
   /* アイコンネーム（右） */
-  .icon-name-right {
+  .icon-name-right{
     right: 0; /* ネームの位置を右から0に */
   }
   /* 吹き出し */
@@ -118,10 +127,13 @@
       height: 60px; /* 画像の高さを-20px */
     }
     /* アイコンネーム */
-    .icon-name {
+    .icon-name-big, .icon-name{
       width: 60px; /* 画像の幅に合わせて-20px */
       top: 62px; /* ネームの位置を上から62に */
       font-size: 9px; /* ネームのフォントサイズを-1px */
+    }
+    .overtablet-only{
+      display : none;
     }
     /* 吹き出し（左） */
     .sb-side-left {

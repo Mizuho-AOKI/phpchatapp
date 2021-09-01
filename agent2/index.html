@@ -14,17 +14,9 @@
  <link href="./chat.css" rel="stylesheet"> 
 
 <!-- (要修正) サニタイジングしてないので, "," を送ってくれないバグあり.  -->
+<!-- (要修正) サニタイジングのON/OFFを切り替える？ -->
 <!-- (要修正) onload.jsにまとめて外部ファイルにする. -->
  <script language="javascript" type="text/javascript">
-
-
-    // (要修正) configで自分の名前(不要？いや, いる), icon種類(10種類から選ぶ, icon0~icon9), 色(カラーピッカーから取得)など簡単な設定を変えられるように.
-    // color picker https://github.com/bgrins/spectrum
-    // profileで設定する情報リスト
-    // 1. 自分の名前 → 届いたら表示されるようにもする.
-    // 2. アイコン(0~9から選ぶ)
-    // 3. アイコンの色(5種類くらいから選ぶ？
-
 
     function saveProfile(initialFlag){
       // save profile settings
@@ -74,7 +66,11 @@
               var dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
               myip = `${data.SERVER_ADDR} <br /> ${dir}`;
               // overwrite myname
-              $("div[name='username']").html(username + myip);
+              // class="title is-6"
+              $("#myname").html(username);
+              $("#myip").html(myip);
+              // $("div[name='username']").html("<span class='subtitle is-6'>"+username+"</span>"+ myip);
+              // $("div[name='username']").html(username + myip);
               if(initialFlag){
                 saveProfile(initialFlag);
               }
@@ -124,23 +120,13 @@
         })
         // when profile setting chenges:
         $("form[name='profile']").change(function() {
-            // 情報取得
-            console.log($("form[name='profile'] #usernameinput").val());
-            console.log($("form[name='profile'] select").val());
-            console.log($("form[name='profile'] #colorpicker").val());            
+            // get infomation
+            // console.log($("form[name='profile'] #usernameinput").val());
+            // console.log($("form[name='profile'] select").val());
+            // console.log($("form[name='profile'] #colorpicker").val());            
 
             // save profile.json
             saveProfile(initialFlag=false);
-            
-            // update profile on the page
-            // updateProfile();
-
-            // プレビュー, 本ページ画像変更, 色も変更
-            // $("div[name='username']").text($("form[name='profile'] #name").val());
-            // $("div[name='username']").text($("form[name='profile'] #name").val());            
-
-            // 送信する情報増やす
-
         })
     });
 
@@ -304,7 +290,9 @@
         <div name="usericon" class="icon-img icon-img-right">
             <img id="usericondebug" src="./media/icons/badguy.svg" />
         </div><!-- /.icon-img icon-img-ri            console.log($("form[name='profile'] input").val());ght -->
-        <div id="myip" name="username" class="icon-name icon-name-right">Me</div>
+        <div name="username" class="icon-name-big icon-name-right">
+          <span id="myname" class='subtitle is-size-6'> Me </span> <span id="myip"> myip </span>
+        </div>
         <div class="sb-side sb-side-right">
             <div class="sb-txt sb-txt-right">
                 <form method="post" onsubmit="writeMessage(); return false;">

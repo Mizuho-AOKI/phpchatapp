@@ -108,11 +108,12 @@ function writeMessage() {
     // send message to the target IP address.
     $.ajax({
         type: 'post',
-        url: `http://${targetip}/receiver.php`,
+        url: `${location.protocol}//${targetip}/receiver.php`,
         data: {
             'message' : $("#message").val(),
-            'sender'  : `http://${myip}`
+            'sender'  : `${location.protocol}//${myip}`
         }
+        // (要修正) 相手が自分と同じ通信プロトコル(http, https)であることを前提にしている. 良いのか？
     })
     .then(
         function(result){
@@ -159,7 +160,7 @@ function Lmsg(sender, msg){
     <!-- Chat box (left) -->
     <div class="sb-box">
         <div class="icon-img icon-img-left">
-        <img src="./icon.png" />
+        <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-left -->
         <div class="icon-name icon-name-left">${sender}</div>
         <div class="sb-side sb-side-left">
@@ -180,7 +181,7 @@ function Rmsg(sender, msg){
     <!-- Chat box (right) -->
     <div class="sb-box">
         <div class="icon-img icon-img-right">
-            <img src="./icon.png" />
+            <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">${sender}</div>
         <div class="sb-side sb-side-right">

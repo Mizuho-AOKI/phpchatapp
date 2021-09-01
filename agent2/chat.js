@@ -11,7 +11,6 @@ function isMuted(){
     }
 }
 
-
 function deleteMessage() {
     msg = "Delete all messages?";
     if(window.confirm(msg)){
@@ -53,15 +52,15 @@ function readMessage() {
             var outArray = new Array();
             var latestmsg = lines[0].split(',')
 
-            if(latestmsg[0] !== 'Me' && $("div[name='msg_l']").eq(0).text() && latestmsg[2] 
-               && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[2]) == -1) && !isMuted() ){
+            if(latestmsg[3] !== 'Me' && $("div[name='msg_l']").eq(0).text() && latestmsg[5] 
+               && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[5]) == -1) && !isMuted() ){
                 // play receive.mp3
                 $("#RecvSound").prop('currentTime', 0);
                 $("#RecvSound").prop('volume', 1);
                 $("#RecvSound").get(0).play();
             }
             
-            $('#messageTextBox').html(""); // delete msgs
+            $('#messageTextBox').html(""); // clear msgbox
 
             for ( var i = 0; i < lines.length; i++ ) {
 
@@ -74,13 +73,13 @@ function readMessage() {
                 
                 var msg_ary = lines[i].split(',');
 
-                if(msg_ary[0] == 'Me'){
-                    $('#messageTextBox').append(Rmsg(msg_ary[0], msg_ary[2]));
+                // ここの引数変える
+                if(msg_ary[3] == 'Me'){
+                    $('#messageTextBox').append(Rmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5]));
                 }else{
-                    $('#messageTextBox').append(Lmsg(msg_ary[0], msg_ary[2]));
+                    $('#messageTextBox').append(Lmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5]));
                 }
             }
-
             return outArray;
         },
         function () {
@@ -92,10 +91,8 @@ function readMessage() {
 // Check received message every 1 seconds
 $(document).ready(function() {
     readMessage();
-    setInterval('readMessage()', 1000);
+    setInterval('readMessage()', 100000);
 });
-
-
 
 function writeMessage() {
 
@@ -110,10 +107,12 @@ function writeMessage() {
         type: 'post',
         url: `${location.protocol}//${targetip}/receiver.php`,
         data: {
+            'name'    : $("form[name='profile'] #usernameinput").val(),
+            'icon'    : $("form[name='profile'] select").val(),
+            'color'   : $("form[name='profile'] #colorpicker").val(),
             'message' : $("#message").val(),
             'sender'  : `${location.protocol}//${myip}`
         }
-        // (要修正) 相手が自分と同じ通信プロトコル(http, https)であることを前提にしている. 良いのか？
     })
     .then(
         function(result){
@@ -122,6 +121,9 @@ function writeMessage() {
                     type: 'post',
                     url: './receiver.php',
                     data: {
+                        'name'    : $("form[name='profile'] #usernameinput").val(),
+                        'icon'    : $("form[name='profile'] select").val(),
+                        'color'   : $("form[name='profile'] #colorpicker").val(),
                         'message' : $("#message").val(),
                         'sender'  : "Me"
                     }
@@ -131,7 +133,7 @@ function writeMessage() {
                         if(saveflag=="succeed"){
                             readMessage();
                             $("#message").val('');
-                            $('#messageTextBox').append(msghtml);
+                            // $('#messageTextBox').append(msghtml);
                             $("#message").focus();
                             if(!isMuted()){
                                 // play send.mp3
@@ -154,7 +156,7 @@ function writeMessage() {
     );
 }
 
-function Lmsg(sender, msg){
+function Lmsg(name, icon, color, sender, msg){
 
     msghtml = `
     <!-- Chat box (left) -->
@@ -162,7 +164,10 @@ function Lmsg(sender, msg){
         <div class="icon-img icon-img-left">
         <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-left -->
-        <div class="icon-name icon-name-left">${sender}</div>
+        <div class="icon-name icon-name-left">
+            <span class="icon-name-left"> ${name} <br /> </span>
+            <span class="icon-name-left overtablet-only"> ${sender} </span>
+        </div>
         <div class="sb-side sb-side-left">
             <div name="msg_l" class="sb-txt sb-txt-left">
                 ${msg}
@@ -175,7 +180,7 @@ function Lmsg(sender, msg){
     return msghtml;
 }
 
-function Rmsg(sender, msg){
+function Rmsg(name, icon, color, sender, msg){
 
     msghtml = `
     <!-- Chat box (right) -->
@@ -183,7 +188,10 @@ function Rmsg(sender, msg){
         <div class="icon-img icon-img-right">
             <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-right -->
-        <div class="icon-name icon-name-right">${sender}</div>
+        <div class="icon-name icon-name-right">
+            <span class="icon-name-right"> ${name} <br /> </span>
+            <span class="icon-name-right overtablet-only" > ${sender} </span>
+        </div>
         <div class="sb-side sb-side-right">
             <div name="msg_r" class="sb-txt sb-txt-right">
                 ${msg}
