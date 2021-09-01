@@ -3,20 +3,18 @@
  * Ref : https://www.it-mure.jp.net/ja/css/%E5%A1%97%E3%82%8A%E3%81%A4%E3%81%B6%E3%81%97%E3%81%AE%E8%89%B2%E3%82%92%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8Bimg-src-svg/1048655414/
  */
 
-function inlineSvg(svgquery, fillcolor, imgsrc, latestflag=false){
+function inlineSvg(svgquery, fillcolor, imgsrc){
+console.log(`${svgquery}, ${fillcolor}, ${imgsrc}`);
 
-// process latest one only?
-// var $SVGtarget = latestflag ? $(svgquery).eq(0) : $(svgquery);
-
-jQuery(svgquery).each(function(){
-    var $img = jQuery(this);
+$(svgquery).each(function(){
+    var $img = $(this);
     var imgID = $img.attr('id');
     var imgClass = $img.attr('class');
     var imgURL = imgsrc ;//? imgsrc : $img.attr('src');
 
-    jQuery.get(imgURL, function(data) {
+    $.get(imgURL, function(data) {
         // Get the SVG tag, ignore the rest
-        var $svg = jQuery(data).find('svg');
+        var $svg = $(data).find('svg');
 
         // Add replaced image's ID to the new SVG
         if(typeof imgID !== 'undefined') {

@@ -13,8 +13,6 @@
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
  <link href="./chat.css" rel="stylesheet"> 
 
-<!-- (要修正) サニタイジングしてないので, "," を送ってくれないバグあり.  -->
-<!-- (要修正) サニタイジングのON/OFFを切り替える？ -->
 <!-- (要修正) onload.jsにまとめて外部ファイルにする. -->
  <script language="javascript" type="text/javascript">
 
@@ -65,12 +63,9 @@
               var loc = location.pathname;
               var dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
               myip = `${data.SERVER_ADDR} <br /> ${dir}`;
-              // overwrite myname
-              // class="title is-6"
-              $("#myname").html(username);
-              $("#myip").html(myip);
-              // $("div[name='username']").html("<span class='subtitle is-6'>"+username+"</span>"+ myip);
-              // $("div[name='username']").html(username + myip);
+              // overwrite myname, myip
+              $("div[name='username'] span[name='myname']").html(username);
+              $("div[name='username'] span[name='myip']").html(myip);
               if(initialFlag){
                 saveProfile(initialFlag);
               }
@@ -120,7 +115,7 @@
         })
         // when profile setting chenges:
         $("form[name='profile']").change(function() {
-            // get infomation
+            // get infomation for debug
             // console.log($("form[name='profile'] #usernameinput").val());
             // console.log($("form[name='profile'] select").val());
             // console.log($("form[name='profile'] #colorpicker").val());            
@@ -150,17 +145,14 @@
         <form name="profile">
           <div class="field">
             <label class="label">Name</label>
-            <!-- onchangeで右のプレビュー & 本来ページの一番上も変える.  -->
             <div class="control">
               <input class="input" id="usernameinput" type="text" id="name" placeholder="Input your name">
-              <!-- 名前はページ読み込み時にconfigの値を入れる. updateprofile実行だけでおけ. -->
             </div>
           </div>
           <div class="field">
             <label class="label">Icon</label>
             <div class="control">
               <div class="select">
-                <!-- changeしたら, 右のプロフィールが変更されるように. 本来ページも変える.-->
                 <select>
                   <option>badguy</option>
                   <option>goodboy</option>
@@ -176,7 +168,6 @@
               </div>
             </div>
             <div class="control mt-2">
-              <!-- changeしたら, 右のプロフィール・本来ページ変える.  -->
             <input type="color" id="colorpicker" name="head" value="#e66465">
             </div>
           </div>
@@ -188,7 +179,9 @@
             <div name="usericon" class="icon-img icon-img-right">
                 <img src="./media/icons/badguy.svg" />
             </div><!-- /.icon-img icon-img-right -->
-            <div name="username" class="icon-name icon-name-right">name</div>
+            <div name="username" class="icon-name icon-name-right">
+              <span name="myname" class='subtitle is-size-6'> Me </span> <span name="myip"> myip </span>
+            </div>
             <div class="sb-side sb-side-right">
                 <div name="msg_r_default" class="sb-txt sb-txt-right">
                     Profile Setting
@@ -216,7 +209,6 @@
           <section class="modal-card-body">
             <!-- Modal content ... -->
             <iframe src="./message.log" id="iframe_id" width="100%"></iframe>
-            <!-- <iframe src="./profile.json" id="iframe_id" width="100%"></iframe> -->
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success" id="update">Update</button>
@@ -267,7 +259,7 @@
           </div>
 
           <div class="navbar-end">
-            <a class="navbar-item" id="open_setting">Profile</a> <!-- 設定ぽいアイコンにしてもいいね. -->
+            <a class="navbar-item" id="open_setting">Profile</a>
             <div class="navbar-item" name="volume">
               <img src="./media/volumeon.png"  id="volumeon" width="30" height="35" class="volume-active">
               <img src="./media/volumeoff.png" id="volumeoff" width="30" height="35" style="display:none;">
@@ -289,9 +281,9 @@
     <div class="sb-box">
         <div name="usericon" class="icon-img icon-img-right">
             <img src="./media/icons/badguy.svg" />
-        </div><!-- /.icon-img icon-img-ri            console.log($("form[name='profile'] input").val());ght -->
-        <div name="username" class="icon-name-big icon-name-right">
-          <span id="myname" class='subtitle is-size-6'> Me </span> <span id="myip"> myip </span>
+        </div><!-- /.icon-img icon-img-right -->
+        <div name="username" class="icon-name icon-name-right">
+          <span name="myname" class='subtitle is-size-6'> Me </span> <span name="myip" id="myip"> myip </span>
         </div>
         <div class="sb-side sb-side-right">
             <div class="sb-txt sb-txt-right">
@@ -323,36 +315,7 @@
 
 <div class="columns is-centered">
   <div id="messageTextBox" class = "column is-6">
-
-    <!-- Chat box (left) -->
-    <div class="sb-box">
-        <div class="icon-img icon-img-left">
-        <img src="./media/icons/badguy.svg" />
-        </div><!-- /.icon-img icon-img-left -->
-        <div class="icon-name icon-name-left">Left</div>
-        <div class="sb-side sb-side-left">
-            <div name="msg_l_default" class="sb-txt sb-txt-left">
-                Sample Text (Left)
-            </div><!-- /.sb-txt sb-txt-left -->
-        </div><!-- /.sb-side sb-side-left -->
-    </div><!-- /.sb-box -->
-    <!-- / Chat box (left) -->
-
-    <!-- Chat box (right) -->
-    <div class="sb-box">
-        <div class="icon-img icon-img-right">
-            <img src="./media/icon.png" />
-        </div><!-- /.icon-img icon-img-right -->
-        <div class="icon-name icon-name-right">Right</div>
-        <div class="sb-side sb-side-right">
-            <div name="msg_r_default" class="sb-txt sb-txt-right">
-                Sample Text (Right)
-            </div><!-- /.sb-txt sb-txt-right -->
-        </div><!-- /.sb-side sb-side-right -->
-    </div><!-- /.sb-box -->
-    <!-- / Chat box (right) -->
-
-    </div> 
+  </div> 
 </div>
 
 <!-- sound -->
@@ -360,6 +323,5 @@
 <audio id="RecvSound" preload="auto"><source src="media/receive.mp3" type="audio/mp3"></audio>
 <audio id="DeleteSound" preload="auto"><source src="media/delete.mp3" type="audio/mp3"></audio>
 
-<!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
 </body>
 </html>

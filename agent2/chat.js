@@ -52,6 +52,14 @@ function readMessage() {
             var outArray = new Array();
             var latestmsg = lines[0].split(',')
 
+            // やっぱり, メッセージが更新されたら, っていう処理は必要. 
+            // 更新されたときだけhtmlを(追加分だけ)書き加える. 音もその時鳴らす.
+            // ログに残るメッセージが最大200件であることに注意しながら. → 超えたら, 追加だけでなくremoveする処理も必要！
+            // → これは, idが200超えたら, prependした個数分下から消す, てな感じで後付けでできそう. 200をベタ書きしないで指定できるとよい.
+            // ログにidを残す. idをメッセージの<div class="sb-box">タグに埋め込む (そのままidでもいいし, nameでも良い)
+            // readmessageでは, まず現存ページを検索, 一番上のメッセージのidを取得
+            // messagelogの更新分だけlinesを切り出して古い方からfor回してprepend()
+
             if(latestmsg[3] !== 'Me' && $("div[name='msg_l']").eq(0).text() && latestmsg[5] 
                && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[5]) == -1) && !isMuted() ){
                 // play receive.mp3
@@ -61,9 +69,8 @@ function readMessage() {
             }
             
             $('#messageTextBox').html(""); // clear msgbox
-
+            msgbox_html = '';
             for ( var i = 0; i < lines.length; i++ ) {
-
                 // ignore blank line
                 if ( lines[i] == '' ) {
                     continue;
@@ -81,7 +88,7 @@ function readMessage() {
                 // change icon styles
                 inlineSvg(`div[name='svg-${msg_ary[1]}-${msg_ary[2]}'] img`, msg_ary[2],`./media/icons/${msg_ary[1]}.svg`);
             }
-            return outArray;
+            // return outArray;
         },
         function () {
             console.log("Error loading the message log.");
@@ -92,8 +99,7 @@ function readMessage() {
 // Check received message every 1 seconds
 $(document).ready(function() {
     readMessage();
-    setInterval('readMessage()', 10000000);
-    // (要修正) 時間戻す 1000に
+    setInterval('readMessage()', 1000);
 });
 
 function writeMessage() {
@@ -135,7 +141,6 @@ function writeMessage() {
                         if(saveflag=="succeed"){
                             readMessage();
                             $("#message").val('');
-                            // $('#messageTextBox').append(msghtml);
                             $("#message").focus();
                             if(!isMuted()){
                                 // play send.mp3
@@ -164,7 +169,7 @@ function Lmsg(name, icon, color, sender, msg){
     <!-- Chat box (left) -->
     <div class="sb-box">
         <div name="svg-${icon}-${color}" class="icon-img icon-img-left">
-        <img src="./media/icon.png" />
+            <img src="./media/icons/${icon}.svg" />
         </div><!-- /.icon-img icon-img-left -->
         <div class="icon-name icon-name-left">
             <span class="icon-name-left"> ${name} <br /> </span>
@@ -187,7 +192,7 @@ function Rmsg(name, icon, color, sender, msg){
     <!-- Chat box (right) -->
     <div class="sb-box">
         <div name="svg-${icon}-${color}" class="icon-img icon-img-right">
-            <img src="./media/icon.png" />
+            <img src="./media/icons/${icon}.svg" />
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">
             <span class="icon-name-right"> ${name} <br /> </span>

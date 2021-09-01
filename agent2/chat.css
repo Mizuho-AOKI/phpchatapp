@@ -31,7 +31,7 @@
     border: 2px solid #eee; /* 画像の縁取りの太さとカラー */
   }
   /* アイコンネーム 大きめ */
-  .icon-name-big, .icon-name {
+  .icon-name {
     position: absolute;
     /* width: 80px; ネームの最大幅を画像と同じに */
     text-align: center; /* ネームの位置をセンターに */
@@ -40,17 +40,6 @@
     font-size: 10px; /* ネームのフォントサイズ */
     line-height: 1.0;
   }
-  /* (要修正) アイコンネーム関連, まとめる. */
-
-  /* アイコンネーム */
-  /* .icon-name { */
-    /* position: absolute; */
-    /* width: 80px; ネームの最大幅を画像と同じに */
-    /* text-align: center; ネームの位置をセンターに */
-    /* top: 65px; ネームの位置を上から65に */
-    /* color: #777; ネームのカラー */
-    /* font-size: 10px; ネームのフォントサイズ */
-  /* } */
 
   /* アイコンネーム（左） */
   .icon-name-left{
@@ -131,7 +120,7 @@
       height: 60px; /* 画像の高さを-20px */
     }
     /* アイコンネーム */
-    .icon-name-big, .icon-name{
+    .icon-name{
       width: 60px; /* 画像の幅に合わせて-20px */
       top: 62px; /* ネームの位置を上から62に */
       font-size: 9px; /* ネームのフォントサイズを-1px */
