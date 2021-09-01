@@ -50,7 +50,7 @@
       $.getJSON('profile.json', (data) => {
         username = `${data.name} <br />`;
         // replace icon img
-        inlineSvg("div[name='usericon'] img,svg", data.color,`./media/icons/${data.icon}.svg`);
+        inlineSvg("div[name='usericon'] img, div[name='usericon'] svg", data.color,`./media/icons/${data.icon}.svg`);
         $("form[name='profile'] select").val(data.icon);
         $("form[name='profile'] #colorpicker").val(data.color);
         // fill input field of username
@@ -288,7 +288,7 @@
     <!-- Box to send message -->
     <div class="sb-box">
         <div name="usericon" class="icon-img icon-img-right">
-            <img id="usericondebug" src="./media/icons/badguy.svg" />
+            <img src="./media/icons/badguy.svg" />
         </div><!-- /.icon-img icon-img-ri            console.log($("form[name='profile'] input").val());ght -->
         <div name="username" class="icon-name-big icon-name-right">
           <span id="myname" class='subtitle is-size-6'> Me </span> <span id="myip"> myip </span>

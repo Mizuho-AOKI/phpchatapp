@@ -73,12 +73,13 @@ function readMessage() {
                 
                 var msg_ary = lines[i].split(',');
 
-                // ここの引数変える
                 if(msg_ary[3] == 'Me'){
                     $('#messageTextBox').append(Rmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5]));
                 }else{
                     $('#messageTextBox').append(Lmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5]));
                 }
+                // change icon styles
+                inlineSvg(`div[name='svg-${msg_ary[1]}-${msg_ary[2]}'] img`, msg_ary[2],`./media/icons/${msg_ary[1]}.svg`);
             }
             return outArray;
         },
@@ -91,7 +92,8 @@ function readMessage() {
 // Check received message every 1 seconds
 $(document).ready(function() {
     readMessage();
-    setInterval('readMessage()', 100000);
+    setInterval('readMessage()', 10000000);
+    // (要修正) 時間戻す 1000に
 });
 
 function writeMessage() {
@@ -161,7 +163,7 @@ function Lmsg(name, icon, color, sender, msg){
     msghtml = `
     <!-- Chat box (left) -->
     <div class="sb-box">
-        <div class="icon-img icon-img-left">
+        <div name="svg-${icon}-${color}" class="icon-img icon-img-left">
         <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-left -->
         <div class="icon-name icon-name-left">
@@ -176,7 +178,6 @@ function Lmsg(name, icon, color, sender, msg){
     </div><!-- /.sb-box -->
     <!-- / Chat box (left) -->
     `;
-
     return msghtml;
 }
 
@@ -185,7 +186,7 @@ function Rmsg(name, icon, color, sender, msg){
     msghtml = `
     <!-- Chat box (right) -->
     <div class="sb-box">
-        <div class="icon-img icon-img-right">
+        <div name="svg-${icon}-${color}" class="icon-img icon-img-right">
             <img src="./media/icon.png" />
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">
