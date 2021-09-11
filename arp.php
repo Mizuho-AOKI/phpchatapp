@@ -1,7 +1,6 @@
 <?php
 
-// ref: http://blog.loadlimits.info/2012/04/php%E3%81%8B%E3%82%89arp%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B/
-// 可視化 https://32877.info/view/336
+// Ref: http://blog.loadlimits.info/2012/04/php%E3%81%8B%E3%82%89arp%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B/
 
 $table = array();
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {

@@ -15,8 +15,7 @@
     <!-- Ref : https://bulma.io/documentation/components/navbar/ -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <a href="../index.html">
-              <!-- <img src="./pageicon.svg" width="112" height="28"> -->
+          <a href="../index.php">
               <h3 class="is-3 mr-5" style = "display: flex; align-items: center;">
               <img src="./agent2/media/pageicon.svg" width="60" height="60">
               <p class="is-size-3 has-text-black">Simple Chat</p>
@@ -33,36 +32,61 @@
     <!-- title -->
      <div class="columns is-centered mb-5 mt-5">
         <div class="column is-9 has-text-centered">
-            <h1 class="title is-2">Index</h1>
+            <h1 class="title is-2"><?php echo dirname(__FILE__) ?></h1>
         </div>
     </div>
-
-    <!-- Navbarを追加 -->
-    <!-- (要修正) サイトマップはtree.phpみたいに自動で取得して可視化する -->
-    <!-- (要修正) tree.php, arp.phpなども少しレイアウトなおす -->
 
     <!-- site map -->
     <div class="columns is-centered mb-5 mt-5">
         <div class="column is-4">
         <aside class="menu">
             <ul class="menu-list">
-            <!-- (要修正) chat.jsを含むフォルダを列挙, index.htmlへ飛ばす -->
             <li>
                 <a class="is-active">Chat agents</a>
                 <ul>
-                <li><a href="./agent1/index.html" target="_blank" rel="noopener noreferrer"> /agent1/index.html </a></li>
-                <li><a href="./agent2/index.html" target="_blank" rel="noopener noreferrer"> /agent2/index.html  </a></li>
+                <?php
+                    $path = dirname( __FILE__);
+                    $dirs = scandir($path);
+
+                    // dirs to ignore
+                    $excludes = array(
+                        '.',
+                        '..',
+                        '.git',
+                    );
+
+                    foreach ($dirs AS $dir) {
+                        // exception
+                        if (in_array($dir, $excludes)) {
+                            continue;
+                        }
+                        // check if each dir is a chat agent.
+                        if ((is_dir($dir) === true) && (is_file($dir . "/chat.js") === true)) {
+                            echo '<li>';
+                            echo '<a href="./' . $dir . '" target="_blank" rel="noopener noreferrer">';
+                            echo "./" . $dir;
+                            echo '</a></li>'."\n";
+                        }
+                    }
+                ?>
                 </ul>
             </li>
             </ul>
-            <!-- (要修正) 同階層のphpをすべて列挙 -->
+
             <ul class="menu-list mt-5">
                 <li>
                 <a class="is-active">For debug</a>
                 <ul>
-                    <li><a href="./arp.php"               target="_blank" rel="noopener noreferrer"> ./arp.php              </a></li>
-                    <li><a href="./tree.php"              target="_blank" rel="noopener noreferrer"> ./tree.php              </a></li>
-                    <li><a href="./test.php"              target="_blank" rel="noopener noreferrer"> ./test.php              </a></li>
+                    <?php
+                        // list php files
+                        $phpscripts = glob('./*.php');
+                        foreach ($phpscripts AS $phpscript) {
+                            echo '<li>';
+                            echo '<a href="./' . $phpscript . '" target="_blank" rel="noopener noreferrer">';
+                            echo $phpscript;
+                            echo '</a></li>'."\n";
+                        }
+                    ?>
                 </ul>
                 </li>
             </ul>
@@ -72,5 +96,3 @@
 
      </body>
     </html>
-
-
