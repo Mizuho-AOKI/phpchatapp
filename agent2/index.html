@@ -16,6 +16,12 @@
 <!-- (要修正) onload.jsにまとめて外部ファイルにする. -->
  <script language="javascript" type="text/javascript">
 
+    function getServerInfo(){
+      $.get("./serverinfo.php", function(data){
+        $('#serverinfo').html('<pre>'+ data +'</pre>')
+      });
+    }
+
     function saveProfile(initialFlag){
       // save profile settings
       console.log($("form[name='profile'] #usernameinput").val());
@@ -78,7 +84,10 @@
     }
 
     $(document).ready(function() {
-        // loading profile
+        // load server info
+        getServerInfo();
+
+        // load profile
         updateProfile(initialFlag=true);
 
         // Check for click events on the navbar burger icon
