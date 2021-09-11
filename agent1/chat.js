@@ -48,103 +48,44 @@ function readMessage() {
     // Please set the permission of reading and writing ./message.log by yourself.
     .then(
         function(data) {
+            var max_msg_num = 200;
             var text  = data.replace(/\r\n|\r/g, "\n");
             var lines = text.split( '\n' );
-            // var outArray = new Array();
             var latestmsg = lines[0].split(',')
             var firstloopFlag = true;
-            // やっぱり, メッセージが更新されたら, っていう処理は必要. 
-            // 更新されたときだけhtmlを(追加分だけ)書き加える. 音もその時鳴らす.
-            // ログに残るメッセージが最大200件であることに注意しながら. → 超えたら, 追加だけでなくremoveする処理も必要！
-            // → これは, idが200超えたら, prependした個数分下から消す, てな感じで後付けでできそう. 200をベタ書きしないで指定できるとよい.
-            // ログにidを残す. idをメッセージの<div class="sb-box">タグに埋め込む (そのままidでもいいし, nameでも良い) id参照が最も高速らしい.
-            // readmessageでは, まず現存ページを検索, 一番上のメッセージのidを取得
-            // messagelogの更新分だけlinesを切り出して古い方からfor回してprepend()
 
-            // 新しいver.
-            // latest messageのidを取得. 
-            var log_latest_id = latestmsg[6] ? latestmsg[6] : 0;
-            console.log(`latest_id from log is : ${log_latest_id}`);
-
+            // get latest id of message.log
+            var log_latest_id = latestmsg[0] ? latestmsg[0] : 0;
+            // get latest id of web site
             var page_latest_id = typeof $("div[name='msg']").eq(0).attr('id') === "undefined" ? 0 : $("div[name='msg']").eq(0).attr('id');
-            // ページに表示されている最新のidを取得(eq(0)のid値)
-            console.log(`latest_id from page is : ${page_latest_id}`)
 
-            // idは1始まり. eq()は0始まりであることに注意
-            // logの最新id - pageの最新id 分だけメッセージを追加する
-            // ※ idが200?を超えたらその分だけ削除する処理もつける.
-            
-            // 新しいver. デバッグ中
-            // if(latestmsg[3] !== 'Me' && $("div[name='msg_l']").eq(0).text() && latestmsg[5] 
-            //    && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[5]) == -1) && !isMuted() ){
-            //     // play receive.mp3
-            //     // 音はif文判断いらないので, 最初ループでのみ流れるよう設定
-            //     $("#RecvSound").prop('currentTime', 0);
-            //     $("#RecvSound").prop('volume', 1);
-            //     $("#RecvSound").get(0).play();
-            // }
-            
-            // $('#messageTextBox').html(""); // clear msgbox
-            // msgbox_html = '';
             for ( var i = log_latest_id-page_latest_id-1; i >= 0; i--) {
                 // ignore blank line
                 if ( lines[i] == '' ) {
-                    console.log("くうはくだよ")
                     continue;
                 }
-
-                if (firstloopFlag){
+                if(page_latest_id >= max_msg_num){
+                    $("div[name='msg']:last").remove();
+                }
+                if (firstloopFlag && !isMuted()){ // play sound on the first loop
                     $("#RecvSound").prop('currentTime', 0);
                     $("#RecvSound").prop('volume', 1);
                     $("#RecvSound").get(0).play();
                     firstloopFlag = false;
                 }
                 
-                // outArray.push( lines[page_latest_id + i] );
-                
+                // split msg and save each element as an array
+                // contents : ## id, name, icon, color, sender, date, message ##
                 var msg_ary = lines[i].split(',');
 
-                if(msg_ary[3] == 'Me'){
-                    $('#messageTextBox').prepend(Rmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5], msg_ary[6]));
+                if(msg_ary[4] == 'Me'){
+                    $('#messageTextBox').prepend(Rmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[4], msg_ary[6]));
                 }else{
-                    $('#messageTextBox').prepend(Lmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5], msg_ary[6]));
+                    $('#messageTextBox').prepend(Lmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[4], msg_ary[6]));
                 }
                 // change icon styles
-                inlineSvg(`div[name='svg-${msg_ary[1]}-${msg_ary[2]}'] img`, msg_ary[2],`./media/icons/${msg_ary[1]}.svg`);
+                inlineSvg(`div[name='svg-${msg_ary[2]}-${msg_ary[3]}'] img`, msg_ary[3],`./media/icons/${msg_ary[2]}.svg`);
             }
-            // return outArray;
-
-
-            // 古いver. ここまるごと書き換える.
-            // if(latestmsg[3] !== 'Me' && $("div[name='msg_l']").eq(0).text() && latestmsg[5] 
-            //    && ($("div[name='msg_l']").eq(0).text().indexOf(latestmsg[5]) == -1) && !isMuted() ){
-            //     // play receive.mp3
-            //     $("#RecvSound").prop('currentTime', 0);
-            //     $("#RecvSound").prop('volume', 1);
-            //     $("#RecvSound").get(0).play();
-            // }
-            
-            // $('#messageTextBox').html(""); // clear msgbox
-            // msgbox_html = '';
-            // for ( var i = 0; i < lines.length; i++ ) {
-            //     // ignore blank line
-            //     if ( lines[i] == '' ) {
-            //         continue;
-            //     }
-                
-            //     outArray.push( lines[i] );
-                
-            //     var msg_ary = lines[i].split(',');
-
-            //     if(msg_ary[3] == 'Me'){
-            //         $('#messageTextBox').append(Rmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5], msg_ary[6]));
-            //     }else{
-            //         $('#messageTextBox').append(Lmsg(msg_ary[0], msg_ary[1], msg_ary[2], msg_ary[3], msg_ary[5], msg_ary[6]));
-            //     }
-            //     // change icon styles
-            //     inlineSvg(`div[name='svg-${msg_ary[1]}-${msg_ary[2]}'] img`, msg_ary[2],`./media/icons/${msg_ary[1]}.svg`);
-            // }
-            // // return outArray;
         },
         function () {
             console.log("Error loading the message log.");
@@ -220,7 +161,7 @@ function writeMessage() {
     );
 }
 
-function Lmsg(name, icon, color, sender, msg, id){
+function Lmsg(id, name, icon, color, sender, msg){
 
     msghtml = `
     <!-- Chat box (left) -->
@@ -234,7 +175,7 @@ function Lmsg(name, icon, color, sender, msg, id){
         </div>
         <div class="sb-side sb-side-left">
             <div name="msg_l" class="sb-txt sb-txt-left">
-                ${id}${msg}
+                ${msg}
             </div><!-- /.sb-txt sb-txt-left -->
         </div><!-- /.sb-side sb-side-left -->
     </div><!-- /.sb-box -->
@@ -243,7 +184,7 @@ function Lmsg(name, icon, color, sender, msg, id){
     return msghtml;
 }
 
-function Rmsg(name, icon, color, sender, msg, id){
+function Rmsg(id, name, icon, color, sender, msg){
 
     msghtml = `
     <!-- Chat box (right) -->
@@ -253,11 +194,10 @@ function Rmsg(name, icon, color, sender, msg, id){
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">
             <span class="icon-name-right"> ${name} <br /> </span>
-            <span class="icon-name-right overtablet-only" > ${sender} </span>
         </div>
         <div class="sb-side sb-side-right">
             <div name="msg_r" class="sb-txt sb-txt-right">
-                ${id}${msg}
+                ${msg}
             </div><!-- /.sb-txt sb-txt-right -->
         </div><!-- /.sb-side sb-side-right -->
     </div><!-- /.sb-box -->
