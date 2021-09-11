@@ -13,18 +13,14 @@
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
  <link href="./chat.css" rel="stylesheet"> 
 
-<!-- (要修正) サニタイジングしてないので, "," を送ってくれないバグあり.  -->
-<!-- (要修正) サニタイジングのON/OFFを切り替える？ -->
 <!-- (要修正) onload.jsにまとめて外部ファイルにする. -->
  <script language="javascript" type="text/javascript">
 
-    // (要修正) configで自分の名前(不要？いや, いる), icon種類(10種類から選ぶ, icon0~icon9), 色(カラーピッカーから取得)など簡単な設定を変えられるように.
-    // color picker https://github.com/bgrins/spectrum
-    // profileで設定する情報リスト
-    // 1. 自分の名前 → 届いたら表示されるようにもする.
-    // 2. アイコン(0~9から選ぶ)
-    // 3. アイコンの色(5種類くらいから選ぶ？
-
+    function getServerInfo(){
+      $.get("./serverinfo.php", function(data){
+        $('#serverinfo').html('<pre>'+ data +'</pre>')
+      });
+    }
 
     function saveProfile(initialFlag){
       // save profile settings
@@ -58,7 +54,7 @@
       $.getJSON('profile.json', (data) => {
         username = `${data.name} <br />`;
         // replace icon img
-        inlineSvg("div[name='usericon'] img,svg", data.color,`./media/icons/${data.icon}.svg`);
+        inlineSvg("div[name='usericon'] img, div[name='usericon'] svg", data.color,`./media/icons/${data.icon}.svg`);
         $("form[name='profile'] select").val(data.icon);
         $("form[name='profile'] #colorpicker").val(data.color);
         // fill input field of username
@@ -73,10 +69,9 @@
               var loc = location.pathname;
               var dir = loc.substring(0, loc.lastIndexOf('/')) + '/';
               myip = `${data.SERVER_ADDR} <br /> ${dir}`;
-              // overwrite myname
-              // class="title is-6"
-              $("div[name='username']").html("<span class='subtitle is-6'>"+username+"</span>"+ myip);
-              // $("div[name='username']").html(username + myip);
+              // overwrite myname, myip
+              $("div[name='username'] span[name='myname']").html(username);
+              $("div[name='username'] span[name='myip']").html(myip);
               if(initialFlag){
                 saveProfile(initialFlag);
               }
@@ -89,7 +84,10 @@
     }
 
     $(document).ready(function() {
-        // loading profile
+        // load server info
+        getServerInfo();
+
+        // load profile
         updateProfile(initialFlag=true);
 
         // Check for click events on the navbar burger icon
@@ -126,23 +124,13 @@
         })
         // when profile setting chenges:
         $("form[name='profile']").change(function() {
-            // 情報取得
-            console.log($("form[name='profile'] #usernameinput").val());
-            console.log($("form[name='profile'] select").val());
-            console.log($("form[name='profile'] #colorpicker").val());            
+            // get infomation for debug
+            // console.log($("form[name='profile'] #usernameinput").val());
+            // console.log($("form[name='profile'] select").val());
+            // console.log($("form[name='profile'] #colorpicker").val());            
 
             // save profile.json
             saveProfile(initialFlag=false);
-            
-            // update profile on the page
-            // updateProfile();
-
-            // プレビュー, 本ページ画像変更, 色も変更
-            // $("div[name='username']").text($("form[name='profile'] #name").val());
-            // $("div[name='username']").text($("form[name='profile'] #name").val());            
-
-            // 送信する情報増やす
-
         })
     });
 
@@ -166,17 +154,14 @@
         <form name="profile">
           <div class="field">
             <label class="label">Name</label>
-            <!-- onchangeで右のプレビュー & 本来ページの一番上も変える.  -->
             <div class="control">
               <input class="input" id="usernameinput" type="text" id="name" placeholder="Input your name">
-              <!-- 名前はページ読み込み時にconfigの値を入れる. updateprofile実行だけでおけ. -->
             </div>
           </div>
           <div class="field">
             <label class="label">Icon</label>
             <div class="control">
               <div class="select">
-                <!-- changeしたら, 右のプロフィールが変更されるように. 本来ページも変える.-->
                 <select>
                   <option>badguy</option>
                   <option>goodboy</option>
@@ -192,7 +177,6 @@
               </div>
             </div>
             <div class="control mt-2">
-              <!-- changeしたら, 右のプロフィール・本来ページ変える.  -->
             <input type="color" id="colorpicker" name="head" value="#e66465">
             </div>
           </div>
@@ -204,7 +188,9 @@
             <div name="usericon" class="icon-img icon-img-right">
                 <img src="./media/icons/badguy.svg" />
             </div><!-- /.icon-img icon-img-right -->
-            <div name="username" class="icon-name icon-name-right">name</div>
+            <div name="username" class="icon-name icon-name-right">
+              <span name="myname" class='subtitle is-size-6'> Me </span> <span name="myip"> myip </span>
+            </div>
             <div class="sb-side sb-side-right">
                 <div name="msg_r_default" class="sb-txt sb-txt-right">
                     Profile Setting
@@ -232,7 +218,6 @@
           <section class="modal-card-body">
             <!-- Modal content ... -->
             <iframe src="./message.log" id="iframe_id" width="100%"></iframe>
-            <!-- <iframe src="./profile.json" id="iframe_id" width="100%"></iframe> -->
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success" id="update">Update</button>
@@ -283,7 +268,7 @@
           </div>
 
           <div class="navbar-end">
-            <a class="navbar-item" id="open_setting">Profile</a> <!-- 設定ぽいアイコンにしてもいいね. -->
+            <a class="navbar-item" id="open_setting">Profile</a>
             <div class="navbar-item" name="volume">
               <img src="./media/volumeon.png"  id="volumeon" width="30" height="35" class="volume-active">
               <img src="./media/volumeoff.png" id="volumeoff" width="30" height="35" style="display:none;">
@@ -304,9 +289,11 @@
     <!-- Box to send message -->
     <div class="sb-box">
         <div name="usericon" class="icon-img icon-img-right">
-            <img id="usericondebug" src="./media/icons/badguy.svg" />
-        </div><!-- /.icon-img icon-img-ri            console.log($("form[name='profile'] input").val());ght -->
-        <div id="myip" name="username" class="icon-name icon-name-right">Me</div>
+            <img src="./media/icons/badguy.svg" />
+        </div><!-- /.icon-img icon-img-right -->
+        <div name="username" class="icon-name icon-name-right">
+          <span name="myname" class='subtitle is-size-6'> Me </span> <span name="myip" id="myip"> myip </span>
+        </div>
         <div class="sb-side sb-side-right">
             <div class="sb-txt sb-txt-right">
                 <form method="post" onsubmit="writeMessage(); return false;">
@@ -337,36 +324,7 @@
 
 <div class="columns is-centered">
   <div id="messageTextBox" class = "column is-6">
-
-    <!-- Chat box (left) -->
-    <div class="sb-box">
-        <div class="icon-img icon-img-left">
-        <img src="./media/icons/badguy.svg" />
-        </div><!-- /.icon-img icon-img-left -->
-        <div class="icon-name icon-name-left">Left</div>
-        <div class="sb-side sb-side-left">
-            <div name="msg_l_default" class="sb-txt sb-txt-left">
-                Sample Text (Left)
-            </div><!-- /.sb-txt sb-txt-left -->
-        </div><!-- /.sb-side sb-side-left -->
-    </div><!-- /.sb-box -->
-    <!-- / Chat box (left) -->
-
-    <!-- Chat box (right) -->
-    <div class="sb-box">
-        <div class="icon-img icon-img-right">
-            <img src="./media/icon.png" />
-        </div><!-- /.icon-img icon-img-right -->
-        <div class="icon-name icon-name-right">Right</div>
-        <div class="sb-side sb-side-right">
-            <div name="msg_r_default" class="sb-txt sb-txt-right">
-                Sample Text (Right)
-            </div><!-- /.sb-txt sb-txt-right -->
-        </div><!-- /.sb-side sb-side-right -->
-    </div><!-- /.sb-box -->
-    <!-- / Chat box (right) -->
-
-    </div> 
+  </div> 
 </div>
 
 <!-- sound -->
@@ -374,6 +332,5 @@
 <audio id="RecvSound" preload="auto"><source src="media/receive.mp3" type="audio/mp3"></audio>
 <audio id="DeleteSound" preload="auto"><source src="media/delete.mp3" type="audio/mp3"></audio>
 
-<!-- (要修正) docker image化,  pullしてすぐ実行できるようにしたい.  -->
 </body>
 </html>

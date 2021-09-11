@@ -59,7 +59,7 @@
             $strMsg = $strMsg . fgets($fp);
             if($count==0){
                 $elements = explode(",", $strMsg);
-                $previous_id = (int)$elements[6];
+                $previous_id = (int)$elements[0];
             }
             $count = $count + 1;
         }
@@ -68,7 +68,7 @@
     flock($fp, LOCK_UN);
     fclose($fp);
     // update $strMsg 
-    $strMsg = $name . ',' . $icon . ',' . $color . ',' . $sender . ',' . date("Y-m-d H:i:s") . ',' . $message . ',' . $latest_id .",\n". $strMsg;
+    $strMsg = $latest_id . ',' . $name . ',' . $icon . ',' . $color . ',' . $sender . ',' . date("Y-m-d H:i:s") . ',' . $message .",\n". $strMsg;
     file_put_contents('message.log', $strMsg, LOCK_EX);
 
     echo "succeed";
