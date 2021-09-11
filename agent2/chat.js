@@ -54,17 +54,10 @@ function readMessage() {
             var latestmsg = lines[0].split(',')
             var firstloopFlag = true;
 
-            // todo
-            // msgが200超えたら消す処理
-            // idをmessage.logの行頭にもってくる.
-
-            // latest messageのidを取得. 
+            // get latest id of message.log
             var log_latest_id = latestmsg[0] ? latestmsg[0] : 0;
-            console.log(`latest_id from log is : ${log_latest_id}`);
-
+            // get latest id of web site
             var page_latest_id = typeof $("div[name='msg']").eq(0).attr('id') === "undefined" ? 0 : $("div[name='msg']").eq(0).attr('id');
-            // ページに表示されている最新のidを取得(eq(0)のid値)
-            console.log(`latest_id from page is : ${page_latest_id}`)
 
             for ( var i = log_latest_id-page_latest_id-1; i >= 0; i--) {
                 // ignore blank line
@@ -74,7 +67,7 @@ function readMessage() {
                 if(page_latest_id >= max_msg_num){
                     $("div[name='msg']:last").remove();
                 }
-                if (firstloopFlag){ // play sound on the first loop
+                if (firstloopFlag && !isMuted()){ // play sound on the first loop
                     $("#RecvSound").prop('currentTime', 0);
                     $("#RecvSound").prop('volume', 1);
                     $("#RecvSound").get(0).play();
@@ -201,7 +194,6 @@ function Rmsg(id, name, icon, color, sender, msg){
         </div><!-- /.icon-img icon-img-right -->
         <div class="icon-name icon-name-right">
             <span class="icon-name-right"> ${name} <br /> </span>
-            <!--<span class="icon-name-right overtablet-only" > ${sender} </span>-->
         </div>
         <div class="sb-side sb-side-right">
             <div name="msg_r" class="sb-txt sb-txt-right">

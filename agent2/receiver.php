@@ -44,11 +44,6 @@
         exit;
     }
 
-    // 1. receiver.phpがpost受けたとき, 新着のメッセージに対してidをつける
-    // 2. jsはページに残る情報から, 最新のidを読み取る. 新着のメッセージだけprependして更新
-    // 3. idが200以上の場合, 増やした分だけ古いのを減らす処理も必要.
-    // last()とかslice()とかうまく使うと良さそう. https://www.buildinsider.net/web/jqueryref/075
-
     $previous_id = 0;
     $fp = fopen('message.log', 'r');
     if (flock($fp, LOCK_SH)) {
@@ -64,12 +59,15 @@
             $count = $count + 1;
         }
     }
+    // calc latest_id referring to the previous one.
     $latest_id = $previous_id + 1;
+    // close file
     flock($fp, LOCK_UN);
     fclose($fp);
     // update $strMsg 
     $strMsg = $latest_id . ',' . $name . ',' . $icon . ',' . $color . ',' . $sender . ',' . date("Y-m-d H:i:s") . ',' . $message .",\n". $strMsg;
     file_put_contents('message.log', $strMsg, LOCK_EX);
 
+    // tell javascript that the process have successfully finished.
     echo "succeed";
 ?>
