@@ -136,6 +136,7 @@ function writeMessage() {
                         'sender'  : "Me"
                     }
                 })
+
                 .then(
                     function (saveflag) {
                         if(saveflag=="succeed"){
